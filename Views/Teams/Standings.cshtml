@@ -1,0 +1,102 @@
+﻿@model IEnumerable<SS1892.EPLPredictor.Models.StandingsModel>
+
+@{
+    ViewData["Title"] = "Premier League Table";
+    var role = AuthModel.Role; 
+    int counter = 0;
+    int? gd = 0;
+    int? played = 0;
+}
+
+<h1>Premier League Table</h1>
+
+<p>
+    @*<a asp-action="Create">Create New</a>*@
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Rank
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team.Team)
+            </th>
+            <th>
+                Played
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.Win)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.Draw)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.Lost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.GF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.GA)
+            </th>
+            <th>
+                GD
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamsStats.Points)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            counter = counter + 1;
+            gd = item.TeamsStats.GF - item.TeamsStats.GA;
+            played = item.TeamsStats.Win + item.TeamsStats.Draw + item.TeamsStats.Lost;
+            <tr>
+                <td>
+                    @counter
+                </td>
+                <th>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="GetStatsByTeam" asp-route-id=@item.Team.Id>@item.Team.Team</a>
+                </th>
+
+                <th>
+                    @played
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.Win)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.Draw)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.Lost)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.GF)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.GA)
+                </th>
+                <th>
+                    @gd
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.TeamsStats.Points)
+                </th>
+                <td>
+                    @if (@role == "Admin" )
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Team.Id">Edit</a>
+              
+@*<a asp-action="Details" asp-route-id="@item.Team.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Team.Id">Delete</a>*@
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,18 @@
+﻿
+@{
+    if (!AuthModel.IsAuthenticated)
+    {
+        Context.Response.Redirect("/Authentication/Login");
+    }
+    ViewData["Title"] = "EPL Predictor";
+    ViewData["GameYear"] = "2024-2025";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome @AuthModel.Name , to @ViewData["Title"] for @ViewData["GameYear"] </h1>
+    <ul>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a>
+        </li>
+    </ul>
+</div>

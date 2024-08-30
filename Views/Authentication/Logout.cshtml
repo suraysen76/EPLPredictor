@@ -1,0 +1,27 @@
+﻿@model string;
+
+@{
+    ViewBag.Title = "Logout";
+    var userName = Html.Raw(Model).ToString();
+}
+
+<h2>Logout</h2>
+
+
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>User Logout</h4>
+        <hr />
+        
+        <div class="form-group">
+        User <u>@userName</u> has been logout.
+        </div>
+
+    </div>
+
+
+    <div>
+        @Html.ActionLink("Login", "Login","Authentication")
+    </div>

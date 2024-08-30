@@ -1,0 +1,83 @@
+﻿@model IEnumerable<SS1892.EPLPredictor.Models.FixtureModel>
+
+@{
+    var role = AuthModel.Role;
+    bool? isLocked = true;
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    @*<a asp-action="Create">Create New</a>*@
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MatchWeek)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HomeTeam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AwayTeam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Result)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            isLocked = item.IsLocked;
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MatchWeek)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeTeam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AwayTeam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Result)
+            </td>
+            <td>
+            @if (@role == "Admin" && @isLocked == false)
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" >Edit</a><span> | </span> 
+                <a asp-action="EditResult" asp-controller="Teams" asp-route-id="@item.Id" >Result</a><span> | </span>  
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a><span> | </span>                   
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            } 
+            @if (@role == "Admin" && @isLocked == true)
+            {
+                <a asp-action="ResetResult" asp-controller="Teams" asp-route-id="@item.Id" >Reset Result</a>
+            } 
+ 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

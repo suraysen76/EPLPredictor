@@ -1,0 +1,57 @@
+﻿@model  SS1892.EPLPredictor.Models.UserModel;
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Name" value="dummy" />
+    <input type="hidden" asp-for="Role" value="dummy" />
+        <div class="form-horizontal">
+            <h4>User Login</h4>
+            <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new {type="Password", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            <br/>
+            </div>  
+           
+        <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Login" class="btnBlue" />
+                <input type="reset" value="Clear" class="btnBlue" />
+            </div>
+            </div>
+        </div>
+    <div>
+        <span style="color:red">@ViewBag.LoginErrorMsg</span>
+    </div>
+    
+    <div>
+        @Html.ActionLink("No Account? Register", "Register","Users")
+    </div>
+
+}
+
+
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
