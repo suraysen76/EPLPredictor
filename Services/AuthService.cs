@@ -63,8 +63,20 @@ namespace SS1892.EPLPredictor.Services
                 //var userModel = new UserModel() { UserName = user.UserName, Name = user.Name };
                 return user;
             }
-            return null;
-            ;
+            return new UserModel();
+            
+        }
+
+        public bool CheckForAdminRole()
+        {
+            if (AuthModel.Role == "Admin")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

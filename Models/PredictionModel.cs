@@ -6,10 +6,13 @@ namespace SS1892.EPLPredictor.Models
     {
         [Key]
         public int Id { get; set; }
-        public int MatchWeek { get; set; }
-        public string UserName { get; set; }
-        public string Prediction { get; set; }
+        public int FixtureId { get; set; }
+        public string? UserName { get; set; }
+        //public string? HomeTeam { get; set; }
+        //public string? AwayTeam { get; set; }
+        public int? HomeTeamScore { get; set; }
+        public int? AwayTeamScore { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public ScoreModel Score { get; set; }
+       
     }
 }

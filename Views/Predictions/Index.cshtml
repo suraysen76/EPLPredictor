@@ -1,0 +1,80 @@
+﻿@model IEnumerable<SS1892.EPLPredictor.Models.FixtureModel>
+
+@{
+    var userName = AuthModel.UserName;
+    string color = "";
+    var shortDate = "";
+    ViewData["Title"] = "Index";
+
+    bool isPast = false;
+
+    
+}
+
+<h1>Fixture  Predictions </h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                Fixture
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+            
+            isPast = DateTime.Now > item.Date;
+            color= isPast?  "LightGrey": "Yellow";
+
+            <tr style="background-color:@color">
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.HomeTeam) vs @Html.DisplayFor(modelItem => item.AwayTeam)
+            </td> 
+            <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                    
+                    @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+            @if (isPast == false)
+            {
+                
+                        <a asp-action="GetPredictionsByFixture" asp-route-id="@item.Id">Prediction List</a>
+
+
+                    }
+                    else
+                    {
+                        if (AuthModel.Role == "Admin")
+                        {
+                            <a asp-action="GetPredictionsByFixture" asp-route-id="@item.Id">Prediction List</a> <span> | </span>
+                        }
+                        <a asp-action="PredictionsWinners" asp-route-id="@item.Id">Winners</a>
+
+                    }
+                </td>
+            </tr>
+            
+        }
+    </tbody>
+</table>

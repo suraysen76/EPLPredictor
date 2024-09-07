@@ -13,63 +13,23 @@ namespace SS1892.EPLPredictor.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly DBCtx _context;
+        private IUserService _userService;
+        
         private IAuthService _authService;
 
-        public UsersController(DBCtx context, IAuthService authService)
-        {
-            _context = context;
+        public UsersController(DBCtx context, IAuthService authService, IUserService userService)
+        {            
             _authService = authService;
-
+            _userService = userService;
         }
 
         // GET: Users
         public async Task<IActionResult> Index()
         {
-              return _context.Users != null ? 
-                          View(await _context.Users.ToListAsync()) :
-                          Problem("Entity set 'DBCtx.UserProfile'  is null.");
+            var users = await _userService.GetUsers();
+            return View(users);
         }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
-
-            var userModel = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(userModel);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,UserName,Name,Password,IsActive")] UserModel userModel)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(userModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(userModel);
-        }
+       
 
         public IActionResult Register()
         {
@@ -101,19 +61,10 @@ namespace SS1892.EPLPredictor.Controllers
 
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
-
-            var userModel = await _context.Users.FindAsync(id);
-            if (userModel == null)
-            {
-                return NotFound();
-            }
-            return View(userModel);
+            UserModel model = await _userService.GetUserById(id);
+            return View(model);
         }
 
         // POST: Users/Edit/5
@@ -121,76 +72,15 @@ namespace SS1892.EPLPredictor.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,Name,Password,IsActive")] UserModel userModel)
+        public async Task<IActionResult> Edit(UserModel userModel)
         {
-            if (id != userModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(userModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserModelExists(userModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(userModel);
+            var retModel = await _userService.UpdateUsers(userModel);
+            return RedirectToAction("Index");
         }
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
-
-            var userModel = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (userModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(userModel);
-        }
-
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Users == null)
-            {
-                return Problem("Entity set 'DBCtx.UserProfile'  is null.");
-            }
-            var userModel = await _context.Users.FindAsync(id);
-            if (userModel != null)
-            {
-                _context.Users.Remove(userModel);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserModelExists(int id)
-        {
-          return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        //private bool UserModelExists(int id)
+        //{
+        //  return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        //}
     }
 }

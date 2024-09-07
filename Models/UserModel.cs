@@ -8,15 +8,15 @@ namespace SS1892.EPLPredictor.Models
         [Key]
         public int Id { get; set; }
         [Required] 
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required] 
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public DateTime JoinedDate { get; set; }
-        public string Role { get; set; }
+        public string? Role { get; set; }
         
         public bool IsActive { get; set; }
     }

@@ -4,11 +4,11 @@
     var role = AuthModel.Role;
     var shortDate = "";
     bool? isLocked = true;
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Team Fixture";
     var nextMatchWeek = Model.Where(m => m.IsLocked == false).OrderBy(o => o.MatchWeek).First().MatchWeek;
 }
 
-<h1>Index</h1>
+<h1>Team Fixture</h1>
 
 <p>
     @*<a asp-action="Create">Create New</a>*@
@@ -67,10 +67,7 @@
             isLocked = item.IsLocked;
             shortDate=item.Date.ToString("dd/MM/yy");//04/08/21
             var color = "";
-            if (item.MatchWeek == nextMatchWeek) 
-            { 
-                color = "Yellow"; 
-            }
+            if (item.MatchWeek == nextMatchWeek) { color = "Yellow"; }
             <tr style="background-color:@color">
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -111,3 +108,6 @@
 }
     </tbody>
 </table>
+<div>
+    <a asp-action="Index" asp-controller="Teams" >Back to Teams</a>
+</div>

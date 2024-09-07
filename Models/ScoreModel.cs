@@ -6,8 +6,8 @@ namespace SS1892.EPLPredictor.Models
     {
         [Key]
         public int Id { get; set; }
-        public string HomeTeam { get; set; }
-        public string AwayTeam { get; set; }
-        public string Score { get; set; }
+        public string? HomeTeam { get; set; }
+        public string? AwayTeam { get; set; }
+        public string? Score { get; set; }
     }
 }

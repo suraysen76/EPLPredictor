@@ -15,7 +15,7 @@ namespace SS1892.EPLPredictor.Services
         }
         public async Task<List<FixtureModel>> GetFixtures()
         {            
-            var fixtures = await _context.Fixtures.OrderBy(f=>f.Id).ToListAsync();
+            var fixtures = await _context.Fixtures.OrderBy(f=>f.Date).ToListAsync();
             return fixtures;
         }
         public async Task<FixtureModel> GetFixturesById(int id)
@@ -23,9 +23,6 @@ namespace SS1892.EPLPredictor.Services
             var fixture = await _context.Fixtures.Where(f=>f.Id==id).ToListAsync();
             return fixture.FirstOrDefault();
         }
-
-
-
         public async Task<FixtureModel> UpdateFixtures(FixtureModel model)
         {
             var viewModel = _context.Fixtures.Where(f => f.Id == model.Id).FirstOrDefault();
@@ -36,6 +33,12 @@ namespace SS1892.EPLPredictor.Services
             await _context.SaveChangesAsync();
             
             return viewModel;
+        }
+
+        public async Task<List<FixtureModel>> GetFixtureByTeam(string team )
+        {           
+            var fmodel = await _context.Fixtures.Where(f => f.HomeTeam == team || f.AwayTeam==team).ToListAsync();
+            return fmodel;
         }
     }
 }

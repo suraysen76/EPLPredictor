@@ -1,0 +1,95 @@
+﻿@model SS1892.EPLPredictor.Models.FixturePredictionModel
+
+@{
+    ViewData["Title"] = "Fixture Prediction";
+    int rownum = 0;
+    string name = AuthModel.Name;
+    string HomeTeam = Model.Fixture.HomeTeam;
+    string AwayTeam = Model.Fixture.AwayTeam;
+    bool userPredicted = false;
+    int fixtureId = Model.Fixture.Id;
+    string color = "";
+    var expiryModel = SS1892.EPLPredictor.Utility.UtilDate.CanPredict(Model.Fixture.Date);
+    var x = 1;
+}
+
+<h1>Predictions for @Model.Fixture.HomeTeam vs @Model.Fixture.AwayTeam </h1>
+@if (@expiryModel.CanPredict)
+{
+    <h2 style="color:red">Prediction will expire on @expiryModel.ExpiryDate </h2>
+}
+<br />
+<p>
+    
+    <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a>
+</p>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predictions.FirstOrDefault().FixtureId)
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                @HomeTeam
+            </th>
+            <th>
+                @AwayTeam
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predictions.FirstOrDefault().UpdatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Predictions)
+        {
+            rownum = rownum + 1;
+            if(item.UserName == AuthModel.UserName){
+                color = "lime";
+            }
+            else {
+                color = "";
+            }
+            <tr style="background-color: @color">
+                <td>@rownum</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FixtureId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName) 
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HomeTeamScore)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AwayTeamScore)                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedDate)
+                </td>
+                <td>
+                    @if (item.UserName == name)
+                    {
+                        userPredicted = true;
+                        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">Edit</a>
+                    }
+                </td>
+                
+            </tr>
+
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Index">Back to Predictions</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

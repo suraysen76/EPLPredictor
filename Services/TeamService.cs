@@ -19,7 +19,7 @@ namespace SS1892.EPLPredictor.Services
 
         public async Task<List<TeamModel>> GetTeams()
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.OrderBy(o=>o.Team).ToListAsync();
             return  teams;
         }
 
@@ -50,7 +50,7 @@ namespace SS1892.EPLPredictor.Services
                 .ThenBy(t=>t.Team.Team);
             
             
-            return model1.ToList();
+            return await model1.ToListAsync();
         }
         
         public async Task<StandingsModel> GetStandingById(int id)
@@ -62,7 +62,7 @@ namespace SS1892.EPLPredictor.Services
             select new StandingsModel { TeamsStats = ts, Team = t };
 
             var retModel = viewModel;
-            return retModel.FirstOrDefault();
+            return await retModel.FirstOrDefaultAsync();
         }
 
         public async Task<TeamStatModel> UpdateTeamStats(TeamStatModel model)
@@ -98,7 +98,7 @@ namespace SS1892.EPLPredictor.Services
             bool isHomeWin = false;
             bool isAwayWin = false;
             bool isDraw = false;
-            if (model.HomeTeamScore> model.AwayTeamScore)
+            if (model.HomeTeamScore > model.AwayTeamScore)
             {
                 isHomeWin = true;
             }
@@ -120,10 +120,14 @@ namespace SS1892.EPLPredictor.Services
 
             //Update Fixture Result
             var fixtureModel2 = _context.Fixtures.Where(f => f.Id == model.FixtureId).FirstOrDefault();
-            fixtureModel2.Result = resultModel.HomeTeamScore.ToString() + " - "+ resultModel.AwayTeamScore.ToString();
+            fixtureModel2.Result = resultModel.HomeTeamScore.ToString() + " - " + resultModel.AwayTeamScore.ToString();
             fixtureModel2.IsLocked = true;
             int homeTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.HomeTeam)).FirstOrDefault().Id;
             int awayTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.AwayTeam)).FirstOrDefault().Id;
+
+
+
+
 
             //Update  TeamStats
             var homeModel = _context.TeamStats.Where(t => t.TeamId == homeTeamId).FirstOrDefault();
@@ -132,7 +136,6 @@ namespace SS1892.EPLPredictor.Services
             homeModel.GA = homeModel.GA + resultModel.AwayTeamScore;
             awayModel.GF = awayModel.GF + resultModel.AwayTeamScore;
             awayModel.GA = awayModel.GA + resultModel.HomeTeamScore;
-
 
             if (isHomeWin)
             {
@@ -149,6 +152,45 @@ namespace SS1892.EPLPredictor.Services
                 homeModel.Draw++;
                 awayModel.Draw++;
             }
+
+            //Update PredictionWinners
+            var winnerList = await _context.PredictionWinners.Where(w => w.FixtureId == model.FixtureId).ToListAsync();
+            var pmodel = await _context.Predictions.Where(p => p.FixtureId == model.FixtureId).ToListAsync();
+            var fmodel = await _context.Fixtures.Where(f => f.Id == model.FixtureId).FirstOrDefaultAsync();
+            var actualResult = fmodel.Result.Split("-");
+            var homeResult = actualResult[0].Trim();
+            var awayResult = actualResult[1].Trim();
+            var pt3winners = pmodel.Where(p => p.HomeTeamScore.ToString() == homeResult && p.AwayTeamScore.ToString() == awayResult).ToList();
+            foreach (var item in pt3winners)
+            {
+                var user = await _context.Users.Where(u => u.UserName == item.UserName).FirstOrDefaultAsync();
+                var winner = new PredictionWinnersModel() { FixtureId = model.FixtureId, Name = user.Name, UserName = user.UserName, Point = 3 };
+                _context.PredictionWinners.Add(winner);
+            }
+
+            if (isHomeWin)
+            {
+                var pt1homewinners = pmodel.Where(p => p.HomeTeamScore > p.AwayTeamScore).ToList();
+                foreach (var item in pt1homewinners)
+                {
+                    var user = await _context.Users.Where(u => u.UserName == item.UserName).FirstOrDefaultAsync();
+                    var winner = new PredictionWinnersModel() { FixtureId = model.FixtureId, Name = user.Name, UserName = user.UserName, Point = 1 };
+                    _context.PredictionWinners.Add(winner);
+                }
+            }
+
+            else if (isAwayWin)
+            {
+                var pt1awaywinners = pmodel.Where(p => p.HomeTeamScore < p.AwayTeamScore).ToList();
+                foreach (var item in pt1awaywinners)
+                {
+                    var user = await _context.Users.Where(u => u.UserName == item.UserName).FirstOrDefaultAsync();
+                    var winner = new PredictionWinnersModel() { FixtureId = model.FixtureId, Name = user.Name, UserName = user.UserName, Point = 1 };
+                    _context.PredictionWinners.Add(winner);
+                }
+            }
+
+
             await _context.SaveChangesAsync();
             return resultModel;
 
@@ -192,6 +234,15 @@ namespace SS1892.EPLPredictor.Services
             awayModel.GF = awayModel.GF - resultModel.AwayTeamScore;
             awayModel.GA = awayModel.GA - resultModel.HomeTeamScore;
 
+
+            //Update PredictionWinners
+            var winners = _context.PredictionWinners.Where(w => w.FixtureId == model.FixtureId);
+            foreach(var winner in winners)
+            {
+                _context.PredictionWinners.Remove(winner);
+            }
+            
+
             //Update Results
             resultModel.AwayTeamScore = null;
             resultModel.HomeTeamScore = null;
@@ -214,11 +265,31 @@ namespace SS1892.EPLPredictor.Services
             return resultModel;
 
         }
+        
+
+        //private async void UpdatePredictiomWinners(int fixtureId)
+        //{
+        //    var winnerList = await _context.PredictionWinners.Where(w => w.FixtureId == fixtureId).ToListAsync();
+
+        //    var pmodel = await _context.Predictions.Where(p => p.FixtureId == fixtureId).ToListAsync();
+        //    var fmodel = await _context.Fixtures.Where(f => f.Id == fixtureId).FirstOrDefaultAsync();
+
+        //    var actualResult = fmodel.Result.Split("-");
+        //    var homeResult = actualResult[0].Trim();
+        //    var awayResult = actualResult[1].Trim();
+
+        //    var winners = pmodel.Where(p => p.HomeTeamScore.ToString() == homeResult && p.AwayTeamScore.ToString() == awayResult).ToList();
+
+        //        foreach (var item in winners)
+        //        {
+        //            var user = await _context.Users.Where(u => u.UserName == item.UserName).FirstOrDefaultAsync();
+        //            var winner = new PredictionWinnersModel() { FixtureId = fixtureId, Name = user.Name, UserName = user.UserName, Point = 3 };
+        //            winnerList.Add(winner);
+
+        //        await _context.SaveChangesAsync();
+        //    }
+        //}
+
     }
-
-
-
-
-
 }
 

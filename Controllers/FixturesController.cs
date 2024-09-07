@@ -14,18 +14,18 @@ namespace SS1892.EPLPredictor.Controllers
     
     public class FixturesController : Controller
     {
-        private readonly DBCtx _context;
+        
         private IFixtureService? _fixtureService;
-        public FixturesController(DBCtx context, IFixtureService fixtureService)
+        public FixturesController( IFixtureService fixtureService)
         {
-            _context = context;
+            
             _fixtureService = fixtureService;
         }
 
         // GET: Fixtures
         public async Task<IActionResult> Index()
         {
-            var fixtures = await _fixtureService.GetFixtures();
+            var fixtures = await _fixtureService?.GetFixtures();
             return View(fixtures);
             
         }
@@ -46,14 +46,23 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> Edit(FixtureModel fixtureModel)
         {
             
-            var retModel = await _fixtureService.UpdateFixtures(fixtureModel);
-            return RedirectToAction("Index", new { id = 99 });
-            //return await Edit(fixtureModel.Id);
+            var retModel = await _fixtureService?.UpdateFixtures(fixtureModel);
+            return RedirectToAction("Index");
+           
         }
-        
-        private bool FixtureModelExists(int id)
+
+        public async Task<IActionResult> GetFixtureByTeam(string team)
         {
-          return (_context.Fixtures?.Any(e => e.Id == id)).GetValueOrDefault();
+
+            var retModel = await _fixtureService?.GetFixtureByTeam(team);
+            return View(retModel);
+
         }
+
+
+        //private bool FixtureModelExists(int id)
+        //{
+        //  return (_context.Fixtures?.Any(e => e.Id == id)).GetValueOrDefault();
+        //}
     }
 }

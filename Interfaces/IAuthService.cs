@@ -8,6 +8,7 @@ namespace SS1892.EPLPredictor.Interfaces
         bool RegisterUser(UserModel model);
         public UserModel GetProfile(string userName);
 
+        bool CheckForAdminRole();
 
     }
 }

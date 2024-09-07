@@ -15,8 +15,10 @@ namespace SS1892.EPLPredictor
             builder.Services.AddDbContext<DBCtx>(
         options => options.UseSqlServer("name=ConnectionStrings:dbConnection"));
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITeamService, TeamService>();
             builder.Services.AddScoped<IFixtureService, FixtureService>();
+            builder.Services.AddScoped<IPredictionService, PredictionService>();
 
             builder.Services.AddControllersWithViews();
 

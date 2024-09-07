@@ -13,7 +13,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th>                
                 @Html.DisplayNameFor(model => model.Team)
             </th>
             <th></th>
@@ -23,7 +23,8 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Team)
+                    <a asp-route-team="@item.Team" asp-controller="Fixtures" asp-action="GetFixtureByTeam">@Html.DisplayFor(modelItem => item.Team)</a>
+                
             </td>
             <td>
              @if (@role == "Admin" )

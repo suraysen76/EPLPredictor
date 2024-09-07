@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SS1892.EPLPredictor.Models;
 
 namespace SS1892.EPLPredictor.Models
 {
@@ -18,5 +19,9 @@ namespace SS1892.EPLPredictor.Models
         public DbSet<TeamStatModel> TeamStats { get; set; }
 
         public DbSet<ResultModel> Results { get; set; }
+
+        public DbSet<PredictionWinnersModel> PredictionWinners { get; set; }
+
+        public DbSet<SS1892.EPLPredictor.Models.PredictionStandingsModel>? PredictionStandingsModel { get; set; }
     }
 }

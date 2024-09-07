@@ -8,11 +8,11 @@ namespace SS1892.EPLPredictor.Models
         public int Id { get; set; }
         
         public int MatchWeek { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
-        public string Location  { get; set; }
-        public string HomeTeam { get; set; }
-        public string AwayTeam { get; set; }
+        public string? Location  { get; set; }
+        public string? HomeTeam { get; set; }
+        public string? AwayTeam { get; set; }
 
         public string? Result { get; set; }
 

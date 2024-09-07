@@ -33,9 +33,9 @@ namespace SS1892.EPLPredictor.Controllers
                     var user = _authService.GetProfile(model.UserName);
 
                     AuthModel.IsAuthenticated = true;
-                    AuthModel.Name = user.Name;
-                    AuthModel.UserName = user.UserName;
-                    AuthModel.Role = user.Role;
+                    AuthModel.Name = user.Name??"";
+                    AuthModel.UserName = user.UserName??"";
+                    AuthModel.Role = user.Role??"";
                     return RedirectToAction("Index", "Home");
                 }
                 ViewBag.LoginErrorMsg = "Invalid UserName or Password";
@@ -81,7 +81,7 @@ namespace SS1892.EPLPredictor.Controllers
 
         public IActionResult Profile()
         {
-            var userName = HttpContext.Session.GetString("UserName");
+            var userName = AuthModel.UserName;
             var userModel = _authService.GetProfile(userName);
             return View(userModel);
         }

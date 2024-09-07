@@ -6,13 +6,14 @@ namespace SS1892.EPLPredictor.Handler
 {
     public class PasswordHandler
     {
+
         public static string GetHashPassword(string password)
         {
-            var pwd=String.Empty;
+            var pwd = String.Empty;
 
             using (MD5 md5Hash = MD5.Create())
-            {                
-                 pwd = PasswordHandler.GetMd5Hash(md5Hash, password);
+            {
+                pwd = PasswordHandler.GetMd5Hash(md5Hash, password);
             }
             return pwd;
         }
@@ -46,6 +47,11 @@ namespace SS1892.EPLPredictor.Handler
             {
                 return false;
             }
+        }
+        public static string GetActualPassword(string password)
+        {
+            var pwd = "";
+            return pwd;
         }
     }
 }
