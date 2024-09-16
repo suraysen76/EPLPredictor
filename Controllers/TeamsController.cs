@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
 using SS1892.EPLPredictor.Services;
+using SS1892.EPLPredictor.Utility;
 
 namespace SS1892.EPLPredictor.Controllers
 {
@@ -22,7 +23,8 @@ namespace SS1892.EPLPredictor.Controllers
             _teamService = teamService;
         }
         public async Task<IActionResult> Index()
-        {            
+        {
+            
             var teams = await _teamService.GetTeams();
             return View(teams);
         }
@@ -35,7 +37,7 @@ namespace SS1892.EPLPredictor.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            StandingsModel model = await _teamService.GetStandingById(id);
+            var model = await _teamService.GetStandingById(id);
             return View(model);
         }
 
@@ -77,7 +79,7 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> GetStatsByTeam(int  id)
         {
             var retModel = await _teamService.GetStandingById(id);
-            return View();
+            return View(retModel);
         }
 
     }

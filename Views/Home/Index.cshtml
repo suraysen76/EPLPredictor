@@ -1,18 +1,62 @@
-﻿
+﻿@model IEnumerable<SS1892.EPLPredictor.Models.PredictionStandingsModel>
+
 @{
     if (!AuthModel.IsAuthenticated)
     {
         Context.Response.Redirect("/Authentication/Login");
     }
-    ViewData["Title"] = "EPL Predictor";
+    ViewData["Title"] = "EPL Predictor Home";
     ViewData["GameYear"] = "2024-2025";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome @AuthModel.Name , to @ViewData["Title"] for @ViewData["GameYear"] </h1>
+
+<div >
+    <h1 class="display-4">Welcome @AuthModel.Name , to @ViewData["Title"] for @ViewData["GameYear"] season.</h1>
     <ul>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a>
-        </li>
+        <b>Prediction Rules</b>
+        <li>Prediction must be made at least 5 minutes before kickoff</li>
+        <li>Correct predictions gets 3 points</li>
+        <li>Correct predicted team wins or lost gets 1 point</li>
+        <li>0 point for no prediction</li>
     </ul>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a>
+       
 </div>
+<div>Current PredictionStandings</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPoints)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPoints)
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

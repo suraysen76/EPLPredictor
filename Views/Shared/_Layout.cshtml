@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isAuth = AuthModel.IsAuthenticated;
+    var action = ViewContext.RouteData.Values["action"].ToString();
+
+    if (!isAuth && action != "Login" && action != "Logout" && action != "Register")
+    {
+        Context.Response.Redirect("/Authentication/Login");
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />

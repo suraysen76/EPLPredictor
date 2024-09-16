@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SS1892.EPLPredictor.Models
@@ -7,7 +8,8 @@ namespace SS1892.EPLPredictor.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required] 
+        [Required]
+        [DisplayName("User Name")]
         public string? UserName { get; set; }
 
         public string? Name { get; set; }
@@ -15,9 +17,11 @@ namespace SS1892.EPLPredictor.Models
         [Required] 
         public string? Password { get; set; }
 
+        [DisplayName("Joined Date")]
         public DateTime JoinedDate { get; set; }
         public string? Role { get; set; }
-        
+
+        [DisplayName("Is Active")]
         public bool IsActive { get; set; }
     }
 }

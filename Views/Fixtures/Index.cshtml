@@ -3,12 +3,12 @@
 @{
     var role = AuthModel.Role;
     var shortDate = "";
-    bool? isLocked = true;
-    ViewData["Title"] = "Index";
+    bool isLocked = true;
+    ViewData["Title"] = "Fixtures";
     var nextMatchWeek = Model.Where(m => m.IsLocked == false).OrderBy(o => o.MatchWeek).First().MatchWeek;
 }
 
-<h1>Index</h1>
+<h1>Fixtures </h1>
 
 <p>
     @*<a asp-action="Create">Create New</a>*@
@@ -44,7 +44,7 @@
 @foreach (var item in Model) {
             var homeTeamColor = "";
             var awayTeamColor = "";
-            if (item.Result != "")
+            if ( !String.IsNullOrEmpty(item.Result))
             {
                 var results = item.Result.Split('-');
 
@@ -64,11 +64,12 @@
                     awayTeamColor = "grey";
                 }
             }
-            isLocked = item.IsLocked;
+            isLocked = item.IsLocked.HasValue ? item.IsLocked.Value : false;
             shortDate=item.Date.ToString("dd/MM/yy");//04/08/21
             var color = "";
-            if (item.MatchWeek == nextMatchWeek) 
-            { 
+            if (item.MatchWeek == nextMatchWeek && !isLocked)
+            {
+               
                 color = "Yellow"; 
             }
             <tr style="background-color:@color">
@@ -85,10 +86,10 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td style="background-color:@homeTeamColor">
-                @Html.DisplayFor(modelItem => item.HomeTeam)
+                    @Html.DisplayFor(modelItem => item.HomeTeam)
             </td>
                 <td style="background-color:@awayTeamColor">
-                @Html.DisplayFor(modelItem => item.AwayTeam)
+                    @Html.DisplayFor(modelItem => item.AwayTeam)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Result)

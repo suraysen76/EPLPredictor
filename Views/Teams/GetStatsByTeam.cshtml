@@ -1,0 +1,132 @@
+﻿@model SS1892.EPLPredictor.Models.FixtureTeamStatModel
+
+@{
+    ViewData["Title"] = "Fixture Prediction";
+    int counter = 0;
+
+    int? gd = Model.TeamStat.GF - Model.TeamStat.GA;
+    int? played = Model.TeamStat.Win + Model.TeamStat.Draw + Model.TeamStat.Lost;
+
+}
+
+<h1>Statistics for @Model.Team </h1>
+<br />
+<h3>Stats </h3>
+<hr />
+<table class="table">
+    <thead>
+        <tr>            
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th>
+                Played
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.Win)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.Draw)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.Lost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.GF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.GA)
+            </th>
+            <th>
+                GD
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.Points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamStat.Points)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody> 
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => Model.Team)
+                </td>
+                <td>
+                    @played
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.TeamStat.Win)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.TeamStat.Draw)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.TeamStat.Lost)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.TeamStat.GF)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => Model.TeamStat.GA)
+                </td>
+                <td>
+                @gd
+                </td>
+                 <th>
+                @Html.DisplayFor(modelItem => Model.TeamStat.Points)
+                </th>
+                <td>                    
+                </td>
+            </tr>
+    </tbody>
+</table>
+<br />
+<h3>Results </h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fixtures.First().Id)
+            </th>
+            <th>
+                Fixture
+            </th>            
+            <th>
+                Result
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Fixtures)
+        {
+            counter = counter + 1;
+            <tr>
+                <td>
+                    @counter
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.HomeTeam) vs @Html.DisplayFor(modelItem => item.AwayTeam)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Result)
+                </th>      
+                <td>                   
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Standings">Back to Table</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

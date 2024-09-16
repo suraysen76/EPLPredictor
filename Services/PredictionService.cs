@@ -15,25 +15,68 @@ namespace SS1892.EPLPredictor.Services
         }
         public async Task<List<FixtureModel>> GetPredictions()
         {
-            var predictTeam = "Liverpool";
-            var team = await _context.Teams.Where(t => t.Team == predictTeam).FirstOrDefaultAsync();
-            var fixtures = await _context.Fixtures.Where(f => f.HomeTeam == team.Team || f.AwayTeam == team.Team).ToListAsync();
+            var predictTeamId = 6;// "Liverpool";
+            
+            //var fixtures = await _context.Fixtures.Where(f => f.HomeTeamId == predictTeamId || f.AwayTeamId == predictTeamId).ToListAsync();
+            var fmodel =
+            from f in _context.Fixtures.Where(f => f.HomeTeamId == predictTeamId || f.AwayTeamId == predictTeamId)
+            join t1 in _context.Teams
+            on f.HomeTeamId equals t1.Id
+            join t2 in _context.Teams
+            on f.AwayTeamId equals t2.Id
+            select new FixtureModel
+            {
+                Id = f.Id,
+                MatchWeek = f.MatchWeek,
+                Date = f.Date,
+                Location = f.Location,
+                HomeTeamId = f.HomeTeamId,
+                AwayTeamId = f.AwayTeamId,
+                HomeTeam = t1.Team,
+                AwayTeam = t2.Team,
+                Result = f.Result,
+                IsLocked = f.IsLocked
+            };            
 
-
-            return fixtures;
+            return fmodel.OrderBy(f=>f.Date).ToList();
         }
         public async Task<FixturePredictionModel> GetPredictionsByFixture(int id)
         {
+
             var fpmodel = new FixturePredictionModel(); var predictions = await _context.Predictions.Where(f => f.Id == id).ToListAsync();
-            var fmodel = await _context.Fixtures.Where(f => f.Id == id).FirstOrDefaultAsync();
+           
+            var fmodel =
+            from f in _context.Fixtures.Where(f => f.Id == id)
+            join t1 in _context.Teams
+            on f.HomeTeamId equals t1.Id
+            join t2 in _context.Teams
+            on f.AwayTeamId equals t2.Id
+            select new FixtureModel
+            {
+                Id = f.Id,
+                MatchWeek = f.MatchWeek,
+                Date = f.Date,
+                Location = f.Location,
+                HomeTeamId = f.HomeTeamId,
+                AwayTeamId = f.AwayTeamId,
+                HomeTeam = t1.Team,
+                AwayTeam = t2.Team,
+                Result = f.Result,
+                IsLocked = f.IsLocked
+            };
             var pmodel = await _context.Predictions.Where(p => p.FixtureId == id).OrderBy(p => p.UserName).ToListAsync();
             foreach (var item in pmodel)
             {
                 var umodel = await _context.Users.Where(u => u.UserName == item.UserName).FirstOrDefaultAsync();
                 item.UserName = umodel.Name;
             }
+            //var hteam = await _context.Teams.Where(t => t.Id == fmodel.HomeTeamId).FirstOrDefaultAsync();
+            //fmodel.HomeTeam = hteam.Team;
+            //var ateam = await _context.Teams.Where(t => t.Id == fmodel.AwayTeamId).FirstOrDefaultAsync();
+            //fmodel.AwayTeam = ateam.Team;
+            
 
-            fpmodel.Fixture = fmodel;
+            fpmodel.Fixture = fmodel.FirstOrDefault();
             fpmodel.Predictions = pmodel;
 
             return fpmodel;
@@ -68,8 +111,28 @@ namespace SS1892.EPLPredictor.Services
 
         public async Task<string> GetPredictionFixture(int fixtureId)
         {
-            var fmodel = await _context.Fixtures.Where(f => f.Id == fixtureId).FirstOrDefaultAsync();
-            return fmodel.HomeTeam + " vs " + fmodel.AwayTeam;
+            var fmodel =
+            from f in _context.Fixtures.Where(f => f.Id == fixtureId)
+            join t1 in _context.Teams
+            on f.HomeTeamId equals t1.Id
+            join t2 in _context.Teams
+            on f.AwayTeamId equals t2.Id
+            select new FixtureModel
+            {
+                Id = f.Id,
+                MatchWeek = f.MatchWeek,
+                Date = f.Date,
+                Location= f.Location,
+                HomeTeamId= f.HomeTeamId,
+                AwayTeamId=f.AwayTeamId,
+                HomeTeam=t1.Team,
+                AwayTeam=t2.Team,
+                Result=f.Result,
+                IsLocked=f.IsLocked
+            };
+
+           
+            return fmodel.FirstOrDefault().HomeTeam + " vs " + fmodel.FirstOrDefault().AwayTeam;
         }
 
         public async Task<List<PredictionStandingsModel>> GetPredictionStandings()
@@ -85,9 +148,26 @@ namespace SS1892.EPLPredictor.Services
                 })
                 .ToListAsync();
 
+
             return returnModel.OrderByDescending(m => m.TotalPoints).ToList();
         }
 
+        public async Task<List<PredictionStandingsModel>> GetMemberPredictionStandings(string userName)
+        {
+
+            var returnModel = await _context.PredictionWinners
+                .Where(p=>p.UserName == userName)
+                .GroupBy(g => g.UserName)
+                .Select(cl => new PredictionStandingsModel
+                {
+                    Name = cl.First().Name,
+                    Username = cl.Key,
+                    TotalPoints = cl.Sum(c => c.Point),
+                })
+                .ToListAsync();          
+
+            return returnModel.OrderByDescending(m => m.TotalPoints).ToList();
+        }
         public async Task<PredictionModel> GetMyPrediction(int fixtureId, string userName)
         {
             var viewModel = _context.Predictions.Where(f => f.FixtureId == fixtureId && f.UserName == userName).FirstOrDefault();

@@ -85,6 +85,39 @@ namespace SS1892.EPLPredictor.Controllers
             var userModel = _authService.GetProfile(userName);
             return View(userModel);
         }
+        public IActionResult ChangePassword()
+        {
+            var pmodel=new ChangePasswordModel() { UserName= AuthModel.UserName,NewPassword="",ConfirmPassword="" };
+            return View(pmodel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //fetch the User Details
+                var userName = AuthModel.UserName;
+                var user = _authService.GetProfile(userName);
+                if (user == null)
+                {
+                    //If User does not exists, redirect to the Login Page
+                    return RedirectToAction("Login", "Authentication");
+                }
+                // ChangePasswordAsync Method changes the user password
+                var result = _authService.ChangePassword(model);
+                
+                if (!result)
+                {
+                    
+                    return View();
+                }
+               
+                return RedirectToAction("Profile", "Authentication");
+            }
+            return View(model);
+        }
+
 
     }
 }

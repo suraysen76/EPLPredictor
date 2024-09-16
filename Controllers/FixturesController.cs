@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
 using SS1892.EPLPredictor.Services;
+using SS1892.EPLPredictor.Utility;
 
 namespace SS1892.EPLPredictor.Controllers
 {
@@ -25,6 +26,7 @@ namespace SS1892.EPLPredictor.Controllers
         // GET: Fixtures
         public async Task<IActionResult> Index()
         {
+           
             var fixtures = await _fixtureService?.GetFixtures();
             return View(fixtures);
             
@@ -51,10 +53,10 @@ namespace SS1892.EPLPredictor.Controllers
            
         }
 
-        public async Task<IActionResult> GetFixtureByTeam(string team)
+        public async Task<IActionResult> GetFixtureByTeam(int teamId)
         {
 
-            var retModel = await _fixtureService?.GetFixtureByTeam(team);
+            var retModel = await _fixtureService?.GetFixtureByTeam(teamId);
             return View(retModel);
 
         }

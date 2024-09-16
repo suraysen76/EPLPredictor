@@ -53,16 +53,42 @@ namespace SS1892.EPLPredictor.Services
             return await model1.ToListAsync();
         }
         
-        public async Task<StandingsModel> GetStandingById(int id)
+        public async Task<FixtureTeamStatModel> GetStandingById(int id)
         {
-            var viewModel =
-            from ts in _context.TeamStats.DefaultIfEmpty()
-            join t in _context.Teams on ts.TeamId equals t.Id
-            where t.Id == id
-            select new StandingsModel { TeamsStats = ts, Team = t };
+            var ftmodel = new FixtureTeamStatModel();
+            var tsModel = await _context.TeamStats.Where(t => t.TeamId == id).FirstOrDefaultAsync();
+            
+            var winpoints = tsModel.Win * 3;
+            var drawpoints = tsModel.Draw * 1;
+            tsModel.Points = winpoints + drawpoints;
 
-            var retModel = viewModel;
-            return await retModel.FirstOrDefaultAsync();
+            var tmodel= await _context.Teams.Where(t => t.Id == id).FirstOrDefaultAsync();
+            var fmodel =
+            from f in _context.Fixtures
+            .Where(f=>(f.HomeTeamId==id || f.AwayTeamId==id) && f.IsLocked==true)
+            .OrderBy(f => f.Date)
+            join t1 in _context.Teams
+            on f.HomeTeamId equals t1.Id
+            join t2 in _context.Teams
+            on f.AwayTeamId equals t2.Id
+            select new FixtureModel
+            {
+                Id = f.Id,
+                MatchWeek = f.MatchWeek,
+                Date = f.Date,
+                Location = f.Location,
+                HomeTeamId = f.HomeTeamId,
+                AwayTeamId = f.AwayTeamId,
+                HomeTeam = t1.Team,
+                AwayTeam = t2.Team,
+                Result = f.Result,
+                IsLocked = f.IsLocked
+            };
+
+            ftmodel.TeamStat = tsModel;
+            ftmodel.Fixtures=fmodel.ToList();
+            ftmodel.Team = tmodel.Team;
+            return ftmodel;
         }
 
         public async Task<TeamStatModel> UpdateTeamStats(TeamStatModel model)
@@ -122,12 +148,8 @@ namespace SS1892.EPLPredictor.Services
             var fixtureModel2 = _context.Fixtures.Where(f => f.Id == model.FixtureId).FirstOrDefault();
             fixtureModel2.Result = resultModel.HomeTeamScore.ToString() + " - " + resultModel.AwayTeamScore.ToString();
             fixtureModel2.IsLocked = true;
-            int homeTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.HomeTeam)).FirstOrDefault().Id;
-            int awayTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.AwayTeam)).FirstOrDefault().Id;
-
-
-
-
+            int? homeTeamId = fixtureModel2.HomeTeamId.HasValue ? fixtureModel2.HomeTeamId : null; 
+            int? awayTeamId =  fixtureModel2.AwayTeamId.HasValue ? fixtureModel2.AwayTeamId : null;
 
             //Update  TeamStats
             var homeModel = _context.TeamStats.Where(t => t.TeamId == homeTeamId).FirstOrDefault();
@@ -223,8 +245,8 @@ namespace SS1892.EPLPredictor.Services
             var fixtureModel2 = _context.Fixtures.Where(f => f.Id == model.FixtureId).FirstOrDefault();
             fixtureModel2.Result = null;
             fixtureModel2.IsLocked = false;
-            int homeTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.HomeTeam)).FirstOrDefault().Id;
-            int awayTeamId = _context.Teams.Where(t => t.Team.Equals(fixtureModel2.AwayTeam)).FirstOrDefault().Id;
+            int? homeTeamId = fixtureModel2.HomeTeamId.HasValue ? fixtureModel2.HomeTeamId : null;
+            int? awayTeamId = fixtureModel2.AwayTeamId.HasValue ? fixtureModel2.AwayTeamId : null;
 
             //Update  TeamStats
             var homeModel = _context.TeamStats.Where(t => t.TeamId == homeTeamId).FirstOrDefault();

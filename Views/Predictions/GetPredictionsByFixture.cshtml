@@ -4,25 +4,30 @@
     ViewData["Title"] = "Fixture Prediction";
     int rownum = 0;
     string name = AuthModel.Name;
-    string HomeTeam = Model.Fixture.HomeTeam;
-    string AwayTeam = Model.Fixture.AwayTeam;
+    string? HomeTeam = Model.Fixture.HomeTeam;
+    string? AwayTeam = Model.Fixture.AwayTeam;
     bool userPredicted = false;
     int fixtureId = Model.Fixture.Id;
     string color = "";
     var expiryModel = SS1892.EPLPredictor.Utility.UtilDate.CanPredict(Model.Fixture.Date);
-    var x = 1;
+   
 }
 
 <h1>Predictions for @Model.Fixture.HomeTeam vs @Model.Fixture.AwayTeam </h1>
 @if (@expiryModel.CanPredict)
 {
-    <h2 style="color:red">Prediction will expire on @expiryModel.ExpiryDate </h2>
+    <h2 style="color:green">Prediction will expire on @expiryModel.ExpiryDate </h2>
+    <p>
+
+        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a>
+    </p>
+}
+else
+{
+    <h2 style="color:red">Prediction has been CLOSED </h2>
 }
 <br />
-<p>
-    
-    <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a>
-</p>
+
 <hr />
 <table class="table">
     <thead>
@@ -77,7 +82,10 @@
                     @if (item.UserName == name)
                     {
                         userPredicted = true;
-                        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">Edit</a>
+                        if (@expiryModel.CanPredict)
+                        {
+                            <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">Update</a>
+                        }
                     }
                 </td>
                 

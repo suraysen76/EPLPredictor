@@ -5,7 +5,7 @@
     ViewData["Title"] = "Premier League Table";
 }
 
-<h1>Premier League Table</h1>
+<h1>Premier League Teams</h1>
 
 <p>
     @*<a asp-action="Create">Create New</a>*@
@@ -23,7 +23,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    <a asp-route-team="@item.Team" asp-controller="Fixtures" asp-action="GetFixtureByTeam">@Html.DisplayFor(modelItem => item.Team)</a>
+                    <a asp-route-team="@item.Id" asp-controller="Fixtures" asp-action="GetFixtureByTeam">@Html.DisplayFor(modelItem => item.Team)</a>
                 
             </td>
             <td>

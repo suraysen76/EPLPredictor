@@ -29,10 +29,10 @@
                 @Html.DisplayNameFor(model => model.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HomeTeam)
+                @Html.DisplayNameFor(model => model.HomeTeamId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AwayTeam)
+                @Html.DisplayNameFor(model => model.AwayTeamId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Result)
@@ -82,10 +82,10 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td style="background-color:@homeTeamColor">
-                @Html.DisplayFor(modelItem => item.HomeTeam)
+                @Html.DisplayFor(modelItem => item.HomeTeamId)
             </td>
                 <td style="background-color:@awayTeamColor">
-                @Html.DisplayFor(modelItem => item.AwayTeam)
+                    @Html.DisplayFor(modelItem => item.AwayTeamId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Result)

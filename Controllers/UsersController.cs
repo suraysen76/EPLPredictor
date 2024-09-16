@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
 using SS1892.EPLPredictor.Services;
+using SS1892.EPLPredictor.Utility;
 
 namespace SS1892.EPLPredictor.Controllers
 {
@@ -26,6 +27,7 @@ namespace SS1892.EPLPredictor.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            
             var users = await _userService.GetUsers();
             return View(users);
         }

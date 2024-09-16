@@ -6,7 +6,7 @@ namespace SS1892.EPLPredictor.Interfaces
     {
         Task<List<TeamModel>> GetTeams();
         Task<List<StandingsModel>> GetStandings();
-        Task<StandingsModel> GetStandingById(int id);
+        Task<FixtureTeamStatModel> GetStandingById(int id);
         Task<TeamStatModel> UpdateTeamStats(TeamStatModel model);
         Task<ResultModel> GetResultById(int id);
         Task<ResultModel> UpdateResult(ResultModel model);

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
 using SS1892.EPLPredictor.Services;
+using SS1892.EPLPredictor.Utility;
 
 namespace SS1892.EPLPredictor.Controllers
 {
@@ -23,6 +24,7 @@ namespace SS1892.EPLPredictor.Controllers
         // GET: Predictions
         public async Task<IActionResult> Index()
         {
+            
             var fixturess = await _predictionService?.GetPredictions();
             return View(fixturess);
         }
@@ -55,6 +57,7 @@ namespace SS1892.EPLPredictor.Controllers
             return View(model);
         }
 
+        
         public async Task<IActionResult> GetMyPrediction(int id)
         {
             ViewBag.Fixture = await _predictionService.GetPredictionFixture(id);

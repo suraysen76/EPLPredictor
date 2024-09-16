@@ -56,11 +56,11 @@
             gd = item.TeamsStats.GF - item.TeamsStats.GA;
             played = item.TeamsStats.Win + item.TeamsStats.Draw + item.TeamsStats.Lost;
             <tr>
-                <td>
-                    @counter
-                </td>
                 <th>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="GetStatsByTeam" asp-route-id=@item.Team.Id>@item.Team.Team</a>
+                    @counter
+                </th>
+                <th>
+                    <a asp-area="" asp-controller="Teams" asp-action="GetStatsByTeam" asp-route-id=@item.Team.Id>@item.Team.Team</a>
                 </th>
 
                 <th>

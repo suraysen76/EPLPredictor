@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SS1892.EPLPredictor.Handler;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
@@ -40,6 +41,7 @@ namespace SS1892.EPLPredictor.Services
             else
             {
                 //hash the password
+
                 var hashedPwd = PasswordHandler.GetHashPassword(model.Password);
                 model.Password= hashedPwd;
                 model.IsActive = true;
@@ -77,6 +79,23 @@ namespace SS1892.EPLPredictor.Services
             {
                 return false;
             }
+        }
+
+        public bool ChangePassword(ChangePasswordModel model)
+        {
+            var success = false;
+            try
+            {
+                var user = _context.Users.Where(u => u.UserName == model.UserName).FirstOrDefault();
+                //hash the password
+                var hashedPwd = PasswordHandler.GetHashPassword(model.NewPassword);
+                user.Password = hashedPwd;
+                _context.Users.Update(user);
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception ex){return false; }
+            
         }
     }
 

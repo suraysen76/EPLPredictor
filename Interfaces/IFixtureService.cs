@@ -9,6 +9,6 @@ namespace SS1892.EPLPredictor.Interfaces
         Task<FixtureModel> GetFixturesById(int id);
         Task<FixtureModel> UpdateFixtures(FixtureModel model);
 
-        Task<List<FixtureModel>> GetFixtureByTeam(string team);
+        Task<List<FixtureModel>> GetFixtureByTeam(int teamId);
     }
 }

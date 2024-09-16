@@ -13,6 +13,7 @@ namespace SS1892.EPLPredictor.Interfaces
         Task<string> GetPredictionFixture(int fixtureId);
 
         Task<List<PredictionStandingsModel>> GetPredictionStandings();
+        Task<List<PredictionStandingsModel>> GetMemberPredictionStandings(string userName);
         Task<PredictionModel> GetMyPrediction(int fixtureId, string userName);
         Task<bool> UpdateMyPrediction(PredictionModel predictionModel);
     }

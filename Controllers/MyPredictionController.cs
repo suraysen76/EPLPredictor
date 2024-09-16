@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SS1892.EPLPredictor.Interfaces;
 using SS1892.EPLPredictor.Models;
+using SS1892.EPLPredictor.Utility;
 
 namespace SS1892.EPLPredictor.Controllers
 {
@@ -24,9 +25,10 @@ namespace SS1892.EPLPredictor.Controllers
         // GET: MyPrediction/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
+            
             var model = await _predictionService.GetMyPrediction(id, AuthModel.UserName);
             
-                return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
+            return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
             
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SS1892.EPLPredictor.Models
 {
@@ -11,5 +12,6 @@ namespace SS1892.EPLPredictor.Models
         public string? UserName { get; set; }
         public string? Name { get; set; }
         public int? Point { get; set; }
+      
     }
 }
