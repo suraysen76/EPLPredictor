@@ -44,7 +44,7 @@
 @foreach (var item in Model) {
             var homeTeamColor = "";
             var awayTeamColor = "";
-            if (item.Result != "")
+            if (!String.IsNullOrEmpty(item.Result))
             {
                 var results = item.Result.Split('-');
 

@@ -4,7 +4,7 @@
     ViewData["Title"] = "EditResult";
 }
 
-<h1>Edit Result</h1>
+<h1>Result for @Model.Fixture</h1>
 
 <h4>ResultModel</h4>
 <hr />
@@ -13,18 +13,21 @@
         <form asp-action="EditResult">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Type" />
+            <input type="hidden" asp-for="FixtureId"  />
             <div class="form-group">
                 <label asp-for="FixtureId" class="control-label"></label>
-                <input asp-for="FixtureId" class="form-control" />
-                <span asp-validation-for="FixtureId" class="text-danger"></span>
+                <input readonly asp-for="FixtureId" class="form-control" />                
             </div>
             <div class="form-group">
-                <label asp-for="HomeTeamScore" class="control-label"></label>
+               @* <label asp-for="HomeTeam" class="control-label"></label>*@
+                @Html.DisplayFor(modelItem => modelItem.HomeTeam)
                 <input asp-for="HomeTeamScore" class="form-control" />
                 <span asp-validation-for="HomeTeamScore" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AwayTeamScore" class="control-label"></label>
+                @*<label asp-for="AwayTeam" class="control-label"></label>*@
+                @Html.DisplayFor(modelItem => modelItem.AwayTeam)
                 <input asp-for="AwayTeamScore" class="form-control" />
                 <span asp-validation-for="AwayTeamScore" class="text-danger"></span>
             </div>

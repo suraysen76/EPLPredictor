@@ -4,7 +4,7 @@
     ViewData["Title"] = "Fixture Prediction";
     int counter = 0;
 
-    int? gd = Model.TeamStat.GF - Model.TeamStat.GA;
+    //int? gd = Model.TeamStat.GF - Model.TeamStat.GA;
     int? played = Model.TeamStat.Win + Model.TeamStat.Draw + Model.TeamStat.Lost;
 
 }
@@ -73,7 +73,7 @@
                 @Html.DisplayFor(modelItem => Model.TeamStat.GA)
                 </td>
                 <td>
-                @gd
+                @Html.DisplayFor(modelItem => Model.TeamStat.GD)
                 </td>
                  <th>
                 @Html.DisplayFor(modelItem => Model.TeamStat.Points)
@@ -92,8 +92,11 @@
                 @Html.DisplayNameFor(model => model.Fixtures.First().Id)
             </th>
             <th>
+                Fixture Id
+            </th>  
+            <th>
                 Fixture
-            </th>            
+            </th>
             <th>
                 Result
             </th>

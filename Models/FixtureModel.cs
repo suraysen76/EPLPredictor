@@ -11,6 +11,8 @@ namespace SS1892.EPLPredictor.Models
 
         [DisplayName("Match Week")]
         public int MatchWeek { get; set; }
+
+        public string? Type { get; set; }
         public DateTime Date { get; set; }
 
         public string? Location  { get; set; }

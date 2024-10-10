@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SS1892.EPLPredictor.Models
 {
@@ -14,7 +15,7 @@ namespace SS1892.EPLPredictor.Models
         public int? Lost { get; set; }
         public int? GF { get; set; }
         public int? GA { get; set; }
-
+        public int? GD { get; set; }
         public int? Points { get; set; }
 
 

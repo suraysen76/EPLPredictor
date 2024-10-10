@@ -2,19 +2,33 @@
 
 @{
     var role = AuthModel.Role;
-    ViewData["Title"] = "Premier League Table";
+    ViewData["Title"] = "Teams";
 }
 
-<h1>Premier League Teams</h1>
+<h1>@Model.First().Type Teams</h1>
 
 <p>
-    @*<a asp-action="Create">Create New</a>*@
+     @if (@role == "Admin" )
+            {
+    <a asp-action="Create">Create New Team</a>
+            }
 </p>
+<ul>
+    <li>
+        <a asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="EPL">EPLTeams</a>
+    </li>
+    <li>
+            <a asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="UCL">UCL Teams</a>
+    </li>
+</ul>
 <table class="table">
     <thead>
         <tr>
             <th>                
                 @Html.DisplayNameFor(model => model.Team)
+            </th>
+            <th>
+                Tournament
             </th>
             <th></th>
         </tr>
@@ -23,8 +37,12 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    <a asp-route-team="@item.Id" asp-controller="Fixtures" asp-action="GetFixtureByTeam">@Html.DisplayFor(modelItem => item.Team)</a>
+                    <a asp-route-type="@item.Type" asp-route-teamId="@item.Id" asp-controller="Fixtures" asp-action="GetFixtureByTeam">@Html.DisplayFor(modelItem => item.Team)</a>
                 
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+
             </td>
             <td>
              @if (@role == "Admin" )

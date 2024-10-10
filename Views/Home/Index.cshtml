@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SS1892.EPLPredictor.Models.PredictionStandingsModel>
+﻿@model SS1892.EPLPredictor.Models.PredictionsWithStandingsModel
 
 @{
     if (!AuthModel.IsAuthenticated)
@@ -19,44 +19,84 @@
         <li>Correct predicted team wins or lost gets 1 point</li>
         <li>0 point for no prediction</li>
     </ul>
-            <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Logout">Logout</a>
+          
        
 </div>
-<div>Current PredictionStandings</div>
+<div>
+    <h4>Current Prediction Standings
+    </h4>
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Username)
+                @Html.DisplayNameFor(model => model.Standing.Username)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Standing.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TotalPoints)
+                @Html.DisplayNameFor(model => model.Standing.TotalPoints)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Username)
+                @Html.DisplayFor(modelItem => Model.Standing.Username)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => Model.Standing.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TotalPoints)
+                @Html.DisplayFor(modelItem => Model.Standing.TotalPoints)
                 </td>
                 <td>
                     @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
                 </td>
-            </tr>
+            </tr>        
+    </tbody>
+</table>
+<div>
+    <h4>Past Predictions</h4>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Fixture
+            </th>
+            <th>
+                Score
+            </th>            
+            <th>
+                Point
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Predictions)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeTeam) vs @Html.DisplayFor(modelItem => item.AwayTeam) 
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.HomeTeamScore) - @Html.DisplayFor(modelItem => item.AwayTeamScore)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Point) 
+                </td>
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+            </td>
+        </tr>
         }
     </tbody>
 </table>

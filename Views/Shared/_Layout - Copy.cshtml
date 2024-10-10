@@ -1,0 +1,113 @@
+﻿@{
+    var isAuth = AuthModel.IsAuthenticated;
+    var action = ViewContext.RouteData.Values["action"].ToString();
+
+    if (!isAuth && action != "Login" && action != "Logout" && action != "Register")
+    {
+        Context.Response.Redirect("/Authentication/Login");
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EPLPredictor</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SS1892.EPLPredictor.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <img src="/images/SS1892Logo.png" width="85" height=85 title="SS1892" />
+                
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    EPLPredictor
+                    </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                       
+                        @if (AuthModel.IsAuthenticated == false)
+                        { 
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Login">Login</a>
+                            </li>                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Members</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index">Fixtures</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index">Teams</a>
+                            </li>
+                            <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings">Table</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Predictions" asp-action="Index">Predictions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Predictions" asp-action="PredictionStandings">Standings</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @{
+                            if (AuthModel.IsAuthenticated == true)
+                            {
+                                <li class="nav-link text-dark" style="margin-right:5px">
+                                    <a asp-area="" asp-controller="Authentication" asp-action="Profile" title="Profile">
+                                        <img src="/images/profile.jpeg" width="15" height=15 />
+                                        @AuthModel.UserName
+                                    </a>
+                                </li>
+                                <li class="nav-link text-dark" style="margin-right:5px">
+
+
+                                    <a asp-area="" asp-controller="Authentication" asp-action="Logout" title="Logout">
+                                        <img src="/images/logout.jpeg" width="15" height=15 />Logout
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - EPLPredictor - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

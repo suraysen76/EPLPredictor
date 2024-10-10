@@ -1,0 +1,109 @@
+﻿@{
+    var isAuth = AuthModel.IsAuthenticated;
+    var action = ViewContext.RouteData.Values["action"].ToString();
+
+    if (!isAuth && action != "Login" && action != "Logout" && action != "Register")
+    {
+        Context.Response.Redirect("/Authentication/Login");
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EPLPredictor</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SS1892.EPLPredictor.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            @if (AuthModel.IsAuthenticated == false)
+                        { 
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Authentication" asp-action="Login">Login</a>
+                            </li>                    
+                        
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Members</a>
+                </li>
+            
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">EPL</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="EPL">Teams</a></li>
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="EPL">Fixtures</a></li>
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings" asp-route-type="EPL">Table</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                    </ul>
+                </li>
+                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">UCL</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="UCL">Teams</a></li>
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="UCL">Fixtures</a></li>
+                        <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings" asp-route-type="UCL">Table</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            }
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+                        @{
+                            if (AuthModel.IsAuthenticated == true)
+                            {
+                                <li class="nav-link text-dark" style="margin-right:5px">
+                                    <a asp-area="" asp-controller="Authentication" asp-action="Profile" title="Profile">
+                                        <img src="/images/profile.jpeg" width="15" height=15 />
+                                        @AuthModel.UserName
+                                    </a>
+                                </li>
+                                <li class="nav-link text-dark" style="margin-right:5px">
+
+
+                                    <a asp-area="" asp-controller="Authentication" asp-action="Logout" title="Logout">
+                                        <img src="/images/logout.jpeg" width="15" height=15 />Logout
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+        </div>
+        </nav>
+
+        </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - EPLPredictor 
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

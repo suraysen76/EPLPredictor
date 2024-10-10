@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<SS1892.EPLPredictor.Models.StandingsModel>
 
 @{
-    ViewData["Title"] = "Premier League Table";
+    ViewData["Title"] = "Table";
     var role = AuthModel.Role; 
     int counter = 0;
     int? gd = 0;
     int? played = 0;
 }
 
-<h1>Premier League Table</h1>
+<h1>@Model.First().Team.Type Table</h1>
 
 <p>
     @*<a asp-action="Create">Create New</a>*@

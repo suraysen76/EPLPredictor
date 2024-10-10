@@ -24,10 +24,10 @@ namespace SS1892.EPLPredictor.Controllers
         }
 
         // GET: Fixtures
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string type)
         {
-           
-            var fixtures = await _fixtureService?.GetFixtures();
+            
+            var fixtures = await _fixtureService?.GetFixtures(type);
             return View(fixtures);
             
         }
@@ -49,11 +49,13 @@ namespace SS1892.EPLPredictor.Controllers
         {
             
             var retModel = await _fixtureService?.UpdateFixtures(fixtureModel);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new {type=retModel.Type});
            
         }
 
-        public async Task<IActionResult> GetFixtureByTeam(int teamId)
+
+
+        public async Task<IActionResult> GetFixtureByTeam(string type, int teamId)
         {
 
             var retModel = await _fixtureService?.GetFixtureByTeam(teamId);
@@ -62,9 +64,26 @@ namespace SS1892.EPLPredictor.Controllers
         }
 
 
-        //private bool FixtureModelExists(int id)
-        //{
-        //  return (_context.Fixtures?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+        public async Task<IActionResult> Create()
+        {
+            var type ="UCL";
+            ViewBag.AvailableTeams = _fixtureService.GetTeamsForDrpdn(type);
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(FixtureModel fModel)
+        {
+            var response = await _fixtureService.AddFixture(fModel);           
+
+            ViewBag.Message = response.Message;
+            if (response.Status)
+            {
+                return RedirectToAction("Index", new {type=fModel.Type});
+            }
+
+            return View();
+        }
     }
 }

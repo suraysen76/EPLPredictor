@@ -61,7 +61,7 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> GetMyPrediction(int id)
         {
             ViewBag.Fixture = await _predictionService.GetPredictionFixture(id);
-            var model = await _predictionService.GetMyPrediction(id, AuthModel.UserName);
+            var model = await _predictionService.GetMyPrediction(id, AuthModel.UserId);
             return View(model);
         }
 
@@ -72,6 +72,15 @@ namespace SS1892.EPLPredictor.Controllers
             
             var viewmodel = await _predictionService.UpdatePredictions(model);
             return RedirectToAction("GetPredictionsByFixture",model.Id);
+        }
+
+        public async Task<IActionResult> CreatePrediction(int id)
+        {
+
+            var model = await _predictionService.GetPrediction(id);
+
+            return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
+
         }
 
         //private bool PredictionModelExists(int id)

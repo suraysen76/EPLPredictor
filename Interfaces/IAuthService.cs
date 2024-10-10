@@ -6,7 +6,7 @@ namespace SS1892.EPLPredictor.Interfaces
     {
         bool AuthenticateUser(UserModel model);
         bool RegisterUser(UserModel model);
-        UserModel GetProfile(string userName);
+        UserModel GetProfile(string username);
 
         bool CheckForAdminRole();
 

@@ -26,7 +26,7 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             
-            var model = await _predictionService.GetMyPrediction(id, AuthModel.UserName);
+            var model = await _predictionService.GetMyPrediction(id, AuthModel.UserId);
             
             return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
             

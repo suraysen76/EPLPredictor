@@ -22,22 +22,25 @@ namespace SS1892.EPLPredictor.Controllers
         {
             _teamService = teamService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string type)
         {
+          
+            var teams = await _teamService.GetTeams(type);
             
-            var teams = await _teamService.GetTeams();
             return View(teams);
         }
 
-        public async Task<IActionResult> Standings()
+        
+
+        public async Task<IActionResult> Standings(string type)
         {
-            var standings = await _teamService.GetStandings();
+            var standings = await _teamService.GetStandings(type);
             return View(standings);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await _teamService.GetStandingById(id);
+            var model = await _teamService.GetTeamById(id);
             return View(model);
         }
 
@@ -61,8 +64,33 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> EditResult(ResultModel model)
         {
             var retModel= await _teamService.UpdateResult(model);
-            return RedirectToAction("Index","Fixtures");
+            return RedirectToAction("Index", "Fixtures", new { type = retModel.Type }) ;
         }
+
+        public async Task<IActionResult> Create()
+        {           
+            return View();
+        }
+
+        // POST: Fixtures/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(TeamModel teamModel)
+        {
+            var response = await _teamService.AddTeam(teamModel);
+
+            ViewBag.Message = response.Message;
+            if (response.Status)
+            {
+                return RedirectToAction("Index");
+            }
+            
+            return View();
+
+        }
+
         public async Task<IActionResult> ResetResult(int id)
         {
             ResultModel model = await _teamService.GetResultById(id);
@@ -74,7 +102,7 @@ namespace SS1892.EPLPredictor.Controllers
         public async Task<IActionResult> ResetResult(ResultModel model)
         {
             var retModel = await _teamService.ResetResult(model);
-            return RedirectToAction("Index", "Fixtures");
+            return RedirectToAction("Index", "Fixtures", new {type=retModel.Type });
         }
         public async Task<IActionResult> GetStatsByTeam(int  id)
         {

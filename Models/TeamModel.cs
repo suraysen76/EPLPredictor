@@ -11,5 +11,9 @@ namespace SS1892.EPLPredictor.Models
 
         public string? Team { get; set; }
 
+        public string? Type { get; set; }
+
+        
+
     }
 }

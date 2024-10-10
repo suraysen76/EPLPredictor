@@ -19,8 +19,13 @@
     <h2 style="color:green">Prediction will expire on @expiryModel.ExpiryDate </h2>
     <p>
 
-        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a>
+        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a> | 
+        @if (AuthModel.Role == "Admin")
+        {
+            <a asp-route-id="@fixtureId" asp-action="CreatePrediction">Create New Prediction</a>
+        }
     </p>
+
 }
 else
 {

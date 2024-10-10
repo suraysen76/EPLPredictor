@@ -57,9 +57,10 @@ namespace SS1892.EPLPredictor.Services
             ;
         }
 
-        public UserModel GetProfile(string userName)
+        public UserModel GetProfile(string username )
         {
-            var user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            var user = _context.Users.Where(u => u.UserName == username)
+                .FirstOrDefault();
             if (user != null)
             {
                 //var userModel = new UserModel() { UserName = user.UserName, Name = user.Name };

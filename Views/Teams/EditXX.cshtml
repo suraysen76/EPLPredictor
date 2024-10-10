@@ -1,0 +1,64 @@
+﻿@model SS1892.EPLPredictor.Models.StandingsModel
+
+@{
+    ViewData["Title"] = "Edit";
+    int? totalPoints = 0;
+    totalPoints = (@Model.TeamsStats.Win * 3) + (@Model.TeamsStats.Draw * 1);
+}
+
+<h1>Edit</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Team.Id" />
+            <input type="hidden" asp-for="TeamsStats.TeamId" />
+            <div class="form-group">               
+                <label asp-for="Team.Team" class="control-label"></label>                
+                @Model.Team.Team
+            </div>     
+            <div class="form-group">
+                <label asp-for="TeamsStats.Win" class="control-label"></label>
+                <input asp-for="TeamsStats.Win" class="form-control" />
+                <span asp-validation-for="TeamsStats.Win" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsStats.Draw" class="control-label"></label>
+                <input asp-for="TeamsStats.Draw" class="form-control" />
+                <span asp-validation-for="TeamsStats.Draw" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsStats.Lost" class="control-label"></label>
+                <input asp-for="TeamsStats.Lost" class="form-control" />
+                <span asp-validation-for="TeamsStats.Lost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsStats.GF" class="control-label"></label>
+                <input asp-for="TeamsStats.GF" class="form-control" />
+                <span asp-validation-for="TeamsStats.GF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamsStats.GA" class="control-label"></label>
+                <input asp-for="TeamsStats.GA" class="form-control" />
+                <span asp-validation-for="TeamsStats.GA" class="text-danger"></span>
+            </div>
+            <div class="form-group">               
+                <label asp-for="TeamsStats.Points" class="control-label"></label>                
+                
+                @totalPoints
+            </div> 
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

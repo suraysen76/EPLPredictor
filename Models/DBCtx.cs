@@ -5,6 +5,10 @@ namespace SS1892.EPLPredictor.Models
 {
     public class DBCtx:DbContext
     {
+        public DBCtx()
+        {
+        }
+
         public DBCtx(DbContextOptions<DBCtx> options)
        : base(options)
         {

@@ -34,6 +34,7 @@ namespace SS1892.EPLPredictor.Controllers
 
                     AuthModel.IsAuthenticated = true;
                     AuthModel.Name = user.Name??"";
+                    AuthModel.UserId = user.Id;
                     AuthModel.UserName = user.UserName??"";
                     AuthModel.Role = user.Role??"";
                     return RedirectToAction("Index", "Home");
@@ -59,8 +60,8 @@ namespace SS1892.EPLPredictor.Controllers
                 var registered = _authService.RegisterUser(model);
                 if (registered)
                 {
-                    HttpContext.Session.SetString("UserAuthenticated", "true");
-                    HttpContext.Session.SetString("UserName", model.UserName);
+                    //HttpContext.Session.SetString("UserAuthenticated", "true");
+                    //HttpContext.Session.SetString("UserName", model.UserName);
 
                     return RedirectToAction("Index", "Home");
                    
@@ -81,8 +82,8 @@ namespace SS1892.EPLPredictor.Controllers
 
         public IActionResult Profile()
         {
-            var userName = AuthModel.UserName;
-            var userModel = _authService.GetProfile(userName);
+            var username = AuthModel.UserName;
+            var userModel = _authService.GetProfile(username);
             return View(userModel);
         }
         public IActionResult ChangePassword()
@@ -97,6 +98,7 @@ namespace SS1892.EPLPredictor.Controllers
             if (ModelState.IsValid)
             {
                 //fetch the User Details
+                var userId = AuthModel.UserId;
                 var userName = AuthModel.UserName;
                 var user = _authService.GetProfile(userName);
                 if (user == null)

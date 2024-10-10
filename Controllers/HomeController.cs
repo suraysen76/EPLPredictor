@@ -17,7 +17,7 @@ namespace SS1892.EPLPredictor.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await _predictionService.GetMemberPredictionStandings(AuthModel.UserName);
+            var model = await _predictionService.GetMemberPredictionStandings(AuthModel.UserId);
             return View(model);
         }
 
@@ -26,10 +26,5 @@ namespace SS1892.EPLPredictor.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

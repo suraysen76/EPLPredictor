@@ -4,15 +4,31 @@
     var role = AuthModel.Role;
     var shortDate = "";
     bool isLocked = true;
+    int nextMatchWeek = 1;
+    var type = Model.FirstOrDefault().Type ;
     ViewData["Title"] = "Fixtures";
-    var nextMatchWeek = Model.Where(m => m.IsLocked == false).OrderBy(o => o.MatchWeek).First().MatchWeek;
+    if (Model.Count() > 1)
+    {
+        nextMatchWeek = Model.Where(m => m.IsLocked == false).OrderBy(o => o.MatchWeek).FirstOrDefault().MatchWeek;
+    }
 }
 
 <h1>Fixtures </h1>
 
-<p>
-    @*<a asp-action="Create">Create New</a>*@
+<p>-
+     @if (@role == "Admin" && @type=="UCL")
+            {
+    <a asp-action="Create">Create New Fixture</a>
+            }
 </p>
+<ul>
+    <li>
+        <a asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="EPL">EPL Fixtures</a>
+    </li>
+    <li>
+        <a asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="UCL">UCL Fixtures</a>
+    </li>
+</ul>
 <table class="table">
     <thead>
         <tr>
@@ -60,21 +76,33 @@
                 }
                 else if (Convert.ToInt16(results[0]) == Convert.ToInt16(results[1]))
                 {
-                    homeTeamColor = "grey";
-                    awayTeamColor = "grey";
+                    homeTeamColor = "silver";
+                    awayTeamColor = "silver";
                 }
             }
             isLocked = item.IsLocked.HasValue ? item.IsLocked.Value : false;
-            shortDate=item.Date.ToString("dd/MM/yy");//04/08/21
+            shortDate=item.Date.ToString("dd/MM/yy hh:mm tt");//04/08/21
             var color = "";
+            var focus = false;
             if (item.MatchWeek == nextMatchWeek && !isLocked)
             {
                
-                color = "Yellow"; 
+                color = "Yellow";
+                focus = true;                         
+
             }
-            <tr style="background-color:@color">
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
+            <tr style="background-color:@color">                
+                <td>
+                    
+                    @if (@focus){
+                        <input style="border:none;outline-width:0;background-color:@color" readonly asp-for="@item.Id" type="text" autofocus/>
+                    }
+                    else {
+                    @*    @Html.DisplayFor(modelItem => item.Id )*@
+                        <input style="border:none;outline-width:0;background-color:@color" readonly asp-for="@item.Id" type="text"  />
+                    }
+
+                    @*@Html.DisplayFor(modelItem => item.Id  )*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MatchWeek)
@@ -104,6 +132,9 @@
             } 
             @if (@role == "Admin" && @isLocked == true)
             {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
+                        <span> | </span>
                 <a asp-action="ResetResult" asp-controller="Teams" asp-route-id="@item.Id" >Reset Result</a>
             } 
  
@@ -112,3 +143,4 @@
 }
     </tbody>
 </table>
+

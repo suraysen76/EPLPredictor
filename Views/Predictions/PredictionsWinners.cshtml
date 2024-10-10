@@ -5,6 +5,7 @@
     ViewData["Title"] = "Prediction Winners";
     string fixture = ViewBag.Fixture;
     string color = "";
+    int counter = 0;
 }
 
 <h1>Prediction Winners for Fixture : @fixture</h1>
@@ -17,6 +18,9 @@
     <thead>
         <tr>
             <th>
+               #
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Name) [@Html.DisplayNameFor(model => model.UserName)]
             </th>
             <th>
@@ -27,9 +31,13 @@
     <tbody>
         @foreach (var item in Model)
         {
+            counter = counter + 1;
             if(item.Point==3){ color = "cyan"; }
             if (item.Point != 3) { color = ""; }
             <tr style="background-color: @color">
+                <td>
+                    @counter
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name) [@Html.DisplayFor(modelItem => item.UserName)]
                 </td>                
