@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +30,9 @@ namespace SS1892.EPLPredictor.Controllers
             var fixturess = await _predictionService?.GetPredictions();
             return View(fixturess);
         }
-        public async Task<IActionResult> GetPredictionsByFixture(int id)
+        public async Task<IActionResult> GetPredictionsByFixture(int fixId)
         {
-            var model = await _predictionService.GetPredictionsByFixture(id);
+            var model = await _predictionService.GetPredictionsByFixture(fixId);
             return View(model);
         }
 
@@ -69,9 +71,9 @@ namespace SS1892.EPLPredictor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateMyPrediction(PredictionModel model)
         {
-            
+
             var viewmodel = await _predictionService.UpdatePredictions(model);
-            return RedirectToAction("GetPredictionsByFixture",model.Id);
+            return RedirectToAction("GetPredictionsByFixture", new { fixId = model.Id });
         }
 
         public async Task<IActionResult> CreatePrediction(int id)
@@ -82,10 +84,41 @@ namespace SS1892.EPLPredictor.Controllers
             return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
 
         }
+        [HttpPost]
+        public async Task<IActionResult> CreatePrediction(PredictionModel pmodel)
+        {
+            //  return View();
+            var model = await _predictionService.UpdatePredictions(pmodel);
+            return RedirectToAction("GetPredictionsByFixture", "Predictions", new { fixId = pmodel.FixtureId });
+            
+        }
+        
+        public async Task<IActionResult> MembersPrediction(int fixId)
+        {          
+            List<UserPredictionModel> model = await _predictionService.GetMembersPrediction(fixId);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MembersPrediction(List<UserPredictionModel> upmodel)
+        {
+            if (ModelState.IsValid)
+            {
+               var success= _predictionService.SetMembersPrediction(upmodel);
+                return RedirectToAction("Index");
+
+            }
+
+
+            // ModelState is not valid, return to the form with errors
+            return View(upmodel);
+        }
 
         //private bool PredictionModelExists(int id)
         //{
         //  return (_context.Predictions?.Any(e => e.Id == id)).GetValueOrDefault();
         //}
     }
+
+
 }

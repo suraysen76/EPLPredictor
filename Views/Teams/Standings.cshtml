@@ -91,6 +91,7 @@
                     @if (@role == "Admin" )
                     {
                         <a asp-action="Edit" asp-route-id="@item.Team.Id">Edit</a>
+                        <a asp-action="EditTeamStats" asp-route-teamId="@item.Team.Id">Edit Stats</a>
               
 @*<a asp-action="Details" asp-route-id="@item.Team.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Team.Id">Delete</a>*@

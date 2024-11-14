@@ -19,7 +19,7 @@
     <h2 style="color:green">Prediction will expire on @expiryModel.ExpiryDate </h2>
     <p>
 
-        <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">My Prediction</a> | 
+        <a asp-controller="MyPrediction" asp-route-fixId="@fixtureId" asp-action="Edit">My Prediction</a> | 
         @if (AuthModel.Role == "Admin")
         {
             <a asp-route-id="@fixtureId" asp-action="CreatePrediction">Create New Prediction</a>
@@ -37,17 +37,17 @@ else
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
+            <th style="width:fit-content">#</th>
             <th>
                 @Html.DisplayNameFor(model => model.Predictions.FirstOrDefault().FixtureId)
             </th>
-            <th>
+            <th style ="width:fit-content">
                 Name
             </th>
-            <th>
+            <th style="width:fit-content">
                 @HomeTeam
             </th>
-            <th>
+            <th style="width:fit-content">
                 @AwayTeam
             </th>
             <th>
@@ -67,29 +67,29 @@ else
                 color = "";
             }
             <tr style="background-color: @color">
-                <td>@rownum</td>
-                <td>
+                <td style="width:fit-content">@rownum</td>
+                <td style="width:fit-content">
                     @Html.DisplayFor(modelItem => item.FixtureId)
                 </td>
-                <td>
+                <td style="width:fit-content">
                     @Html.DisplayFor(modelItem => item.UserName) 
                 </td>
-                <td>
+                <td style="width:fit-content">
                     @Html.DisplayFor(modelItem => item.HomeTeamScore)
                 </td>
-                <td>
+                <td style="width:fit-content">
                     @Html.DisplayFor(modelItem => item.AwayTeamScore)                    
                 </td>
-                <td>
+                <td style="width:fit-content">
                     @Html.DisplayFor(modelItem => item.UpdatedDate)
                 </td>
-                <td>
+                <td style="width:fit-content">
                     @if (item.UserName == name)
                     {
                         userPredicted = true;
                         if (@expiryModel.CanPredict)
                         {
-                            <a asp-controller="MyPrediction" asp-route-id="@fixtureId" asp-action="Edit">Update</a>
+                            <a asp-controller="MyPrediction" asp-route-fixId="@fixtureId" asp-action="Edit">Update</a>
                         }
                     }
                 </td>

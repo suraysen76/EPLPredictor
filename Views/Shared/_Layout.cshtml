@@ -21,7 +21,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm">
+        <nav class="navbar navbar-expand-sm" style="font-size:larger; ">
   <div class="container-fluid">
                 <a class="navbar-brand" href="#">
                     <img src="/images/SS1892Logo.png" width="85" height=85 title="SS1892" />
@@ -45,6 +45,10 @@
         }
         else
         {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Members</a>
+                
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">EPL</a>
               <ul class="dropdown-menu">
@@ -52,7 +56,7 @@
                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="EPL">Fixtures</a></li>
                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings" asp-route-type="EPL">Table</a></li>
               </ul>
-            </li>
+            </li>            
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">UCL</a>
                 <ul class="dropdown-menu">
@@ -62,11 +66,28 @@
                 </ul>
             </li>
             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">FA</a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="FA">Teams</a></li>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="FA">Fixtures</a></li>
+                    @*<li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings" asp-route-type="FA">Table</a></li>*@
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Carabao</a>
+                <ul class="dropdown-menu">
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Index" asp-route-type="CRB">Teams</a></li>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Fixtures" asp-action="Index" asp-route-type="CRB">Fixtures</a></li>
+                    @*<li><a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Standings" asp-route-type="CRB">Table</a></li>*@
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Predictions</a>
                 <ul class="dropdown-menu">
                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Predictions" asp-action="Index">Predict</a></li>
                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Predictions" asp-action="PredictionStandings">Standings</a></li>
-                </ul>
+                    
+                                </ul>
                 </li>
         }
       </ul>
@@ -84,7 +105,7 @@
 
 
                                     <a style="position: absolute;right: 110pt" asp-area="" asp-controller="Authentication" asp-action="Logout" title="Logout">
-                                    <img src="/images/logout.jpeg" width="15" height=15 />Logout
+                                    <img src="/images/logout.jpg" width="25" height=25 />Logout
                                 </a>
                             </li>
                         }
@@ -100,13 +121,14 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+        @*<footer class="border-top footer text-muted">
+            <div class="container">
+                &copy; 2024 - EPLPredictor
+            </div>
+        </footer>*@
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - EPLPredictor
-        </div>
-    </footer>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

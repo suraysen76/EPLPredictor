@@ -84,7 +84,7 @@ namespace SS1892.EPLPredictor.Controllers
             ViewBag.Message = response.Message;
             if (response.Status)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new {type=teamModel.Type});
             }
             
             return View();
@@ -109,6 +109,23 @@ namespace SS1892.EPLPredictor.Controllers
             var retModel = await _teamService.GetStandingById(id);
             return View(retModel);
         }
+        public async Task<IActionResult> EditTeamStats(int teamId)
+        {
+            var retModel = await _teamService.EditTeamStats(teamId);
+            var tmodel= await _teamService.GetTeamById(teamId);
+            ViewBag.Team = tmodel.Team;
+            ViewBag.Type = tmodel.Type;
+            return View(retModel);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> EditTeamStats(TeamStatModel model)
+        {
+            
+            var tmodel = await _teamService.GetTeamById(model.TeamId);
+            ViewBag.Team = tmodel.Team;
+            ViewBag.Type = tmodel.Type;
+            return View(retModel);
+        }
     }
 }

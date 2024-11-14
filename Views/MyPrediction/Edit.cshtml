@@ -5,6 +5,7 @@
 }
 
 <h1>Predict</h1>
+<h2>for @Model.HomeTeam vs @Model.AwayTeam</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -51,7 +52,7 @@
 </div>
 
 <div>    
-    <a asp-action="GetPredictionsByFixture" asp-controller="Predictions" asp-route-id="@Model.FixtureId">Back to Prediction</a>
+    <a asp-action="GetPredictionsByFixture" asp-controller="Predictions" asp-route-fixId="@Model.FixtureId">Back to Prediction</a>
 </div>
 
 @section Scripts {

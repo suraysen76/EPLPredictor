@@ -23,10 +23,10 @@ namespace SS1892.EPLPredictor.Controllers
         }
 
         // GET: MyPrediction/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int fixId)
         {
             
-            var model = await _predictionService.GetMyPrediction(id, AuthModel.UserId);
+            var model = await _predictionService.GetMyPrediction(fixId, AuthModel.UserId);
             
             return View(model);// RedirectToAction("GetPredictionsByFixture","Predictions",new { id = id });
             
@@ -41,7 +41,7 @@ namespace SS1892.EPLPredictor.Controllers
         {
             var x = await _predictionService.UpdateMyPrediction(predictionModel);
             //return View(predictionModel);
-            return RedirectToAction("GetPredictionsByFixture", "Predictions", new {id= predictionModel .FixtureId});
+            return RedirectToAction("GetPredictionsByFixture", "Predictions", new {fixId= predictionModel .FixtureId});
         }
  
     }

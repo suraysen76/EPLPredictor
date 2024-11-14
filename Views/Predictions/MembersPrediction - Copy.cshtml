@@ -1,0 +1,68 @@
+﻿@model List<UserPredictionModel>
+@{
+    var HomeTeam= Model.First().Fixture.HomeTeam;
+    var AwayTeam = Model.First().Fixture.AwayTeam;
+}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(odd) {
+        background-color: lime;
+    }
+    tr:nth-child(even) {
+        background-color: lightblue;
+    }
+</style>
+<h1>Members  Predictions for @Model.First().Fixture.HomeTeam vs @Model.First().Fixture.AwayTeam </h1>
+@using (Html.BeginForm("MembersPrediction", null, FormMethod.Post, null))
+{
+<table width="100%" border="1">
+     <thead>
+        <tr>
+            <th style="width:fit-content">
+                @Html.DisplayNameFor(model => model.First().UserId)
+            </th>
+            <th style="width:fit-content">
+                    @Html.DisplayNameFor(model => model.First().UserName)
+            </th>
+            <th style="width:fit-content">
+                    @Html.DisplayNameFor(model => model.First().Name)
+            </th>
+            <th style="width:fit-content">
+                Prediction
+            </th>
+    </thead>    
+    <tbody>
+            @foreach (var item in Model)
+            {
+             <tr>            
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @HomeTeam : @Html.EditorFor(model => item.Prediction.HomeTeamScore, new { htmlAttributes = new { @class = "form-control",style = "width:70px" } })
+                    @AwayTeam : @Html.EditorFor(model => item.Prediction.AwayTeamScore, new { htmlAttributes = new { @class = "form-control",style = "width:70px" } })
+                    
+                </td>
+            </tr>
+            }
+    </tbody>    
+</table>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+}

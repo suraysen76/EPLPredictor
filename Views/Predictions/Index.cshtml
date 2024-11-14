@@ -7,8 +7,8 @@
     ViewData["Title"] = "Index";
 
     bool isPast = false;
-
-    
+    var nextFixtureDate = Model.Where(f => f.Date > DateTime.Now).FirstOrDefault().Date;
+    var xxxx = 1;
 }
 
 <h1>Fixture  Predictions </h1>
@@ -16,14 +16,14 @@
 <p>
     @*<a asp-action="Create">Create New</a>*@
 </p>
-<table class="table">
+<table class="table" style="width:100%">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                Tournament
+                Cup
             </th>
             <th>
                 Fixture
@@ -39,9 +39,23 @@
     </thead>
     <tbody>
     @foreach (var item in Model) {
-            
-            isPast = DateTime.Now > item.Date;
-            color= isPast?  "LightGrey": "Yellow";
+
+            if (item.Date == nextFixtureDate)
+            {
+                isPast = true;
+                color = "Yellow";
+            }
+            else if (item.Date < nextFixtureDate)
+            {
+                isPast = false;
+                color = "LightGrey";
+            }
+            else
+            {
+                color = "";
+            }
+            @*isPast = item.Id==nextFixtureId;
+            color= isPast?  "LightGrey": "Yellow";*@
             var logo = "";
             var logotitle = "";
             if (item.Type =="EPL") {
@@ -52,45 +66,53 @@
                 logo = "/images/ucllogo.png";
                 logotitle = "UCL";
             }
+            else if (item.Type == "CRB")
+            {
+                logo = "/images/crblogo.png";
+                logotitle = "Carabao";
+            }
 
             <tr style="background-color:@color">
             
-            <td>
+            <td style="width:5%">
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
-            <td>               
+            <td style="width:1px">
                     <img src=@logo width="30" height=30 title=@logotitle />
             </td>
-            <td>
+            <td style="width:25%">
                     @Html.DisplayFor(modelItem => item.HomeTeam) vs @Html.DisplayFor(modelItem => item.AwayTeam)
             </td> 
-            <td>
+            <td style="width:15%">
                     @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td>
+            <td style="width:15%">
                     
                     @Html.DisplayFor(modelItem => item.Location)
             </td>
-            <td>
+                <td style="width:30%">
             @if (isPast == false)
+            {                
+                <a asp-action="GetPredictionsByFixture" asp-route-fixId="@item.Id">Past Prediction List</a>
+                <a asp-action="PredictionsWinners" asp-route-id="@item.Id">Winners</a>
+            }
+            else
             {
+                @if (AuthModel.Role == "Admin"){
+
+                    <a asp-action="GetPredictionsByFixture" asp-route-fixId="@item.Id">Prediction List</a> <span> | </span>
+                }
+                <a asp-action="PredictionsWinners" asp-route-id="@item.Id">Winners</a>
                 
-                        <a asp-action="GetPredictionsByFixture" asp-route-id="@item.Id">Prediction List</a>
-
-
-                    }
-                    else
+            }
+                    @if (AuthModel.Role == "Admin")
                     {
-                        if (AuthModel.Role == "Admin")
-                        {
-                            <a asp-action="GetPredictionsByFixture" asp-route-id="@item.Id">Prediction List</a> <span> | </span>
-                        }
-                        <a asp-action="PredictionsWinners" asp-route-id="@item.Id">Winners</a>
-
+                                <li><a asp-controller="Predictions" asp-action="MembersPrediction" asp-route-fixId="@item.Id">Members Prediction</a></li>
                     }
                 </td>
             </tr>
             
         }
+        @color="";
     </tbody>
 </table>

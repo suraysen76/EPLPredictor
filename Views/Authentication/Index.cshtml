@@ -1,0 +1,20 @@
+﻿@model List<UserPredictionModel>
+
+@using (Html.BeginForm("ProcessPList", "Authentication", FormMethod.Post))
+{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        @Html.HiddenFor(model => model[i].Id)
+                <div>
+            <label>UserId:</label>
+            @Html.TextBoxFor(model => model[i].UserId)
+                </div>
+                <div>
+            <label>UserName:</label>
+            @Html.TextBoxFor(model => model[i].UserName)
+                </div>
+                <br />
+    }
+
+        <input type="submit" value="Submit" />
+}

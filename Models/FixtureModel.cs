@@ -7,6 +7,7 @@ namespace SS1892.EPLPredictor.Models
     public class FixtureModel
     {
         [Key]
+        [DisplayName("Fixture Id")]
         public int Id { get; set; }
 
         [DisplayName("Match Week")]

@@ -16,6 +16,10 @@ namespace SS1892.EPLPredictor.Services
         }
         public async Task<List<FixtureModel>> GetFixtures(string type)
         {
+
+            var x =  _context.Fixtures.Where (x => x.Type == type).ToList(); 
+            
+
             var fmodel =
             from f in _context.Fixtures
             .OrderBy(f => f.Date)
@@ -24,13 +28,13 @@ namespace SS1892.EPLPredictor.Services
             join t2 in _context.Teams
             on f.AwayTeamId equals t2.Id
             where f.Type == type // && (f.HomeTeamId==6 || f.AwayTeamId==6)
-            
+
             select new FixtureModel
             {
-                Id = f.Id,
+                Id = f.Id,                
                 MatchWeek = f.MatchWeek,
                 Date = f.Date,
-                Type= f.Type,
+                Type = f.Type,
                 Location = f.Location,
                 HomeTeamId = f.HomeTeamId,
                 AwayTeamId = f.AwayTeamId,
@@ -39,8 +43,16 @@ namespace SS1892.EPLPredictor.Services
                 Result = f.Result,
                 IsLocked = f.IsLocked
             };
-           
-            return fmodel.OrderBy(f => f.Date).ThenBy(f => f.HomeTeam).ToList();
+
+            if (fmodel.Count() < 1)
+            {
+                var model = new List<FixtureModel>();
+                model.Add(new FixtureModel() { Type = type });
+                return model;
+            }
+            else { 
+                return fmodel.OrderBy(f => f.Date).ThenBy(f => f.HomeTeam).ToList();
+            }
         }
         public async Task<FixtureModel> GetFixturesById(int id)
         {
@@ -102,6 +114,14 @@ namespace SS1892.EPLPredictor.Services
                                 })
                         .OrderBy(o=>o.Text);
 
+            if (teams.Count() < 1)
+            {
+                List<SelectListItem> dummy = new List<SelectListItem>();
+                dummy.Add(new SelectListItem() { Text = "Team1", Value = "1" });
+                return new SelectList(dummy, "Value", "Text");
+                //return Enumerable.Empty<SelectListItem>();
+            }
+
             return new SelectList(teams, "Value", "Text");
         }
 
@@ -115,21 +135,27 @@ namespace SS1892.EPLPredictor.Services
                 var exist = _context.Fixtures.Where(x => x.Type == model.Type && x.HomeTeamId == model.HomeTeamId && x.AwayTeamId == model.AwayTeamId).Any();
                 if (exist)
                 {
-                   
-
+                    
                     response.Status = false;
                     response.Message = "Fixture " + model.HomeTeam + " vs "+ model.AwayTeam + " already exist in " + model.Type;
                 }
                 else
                 {
-
+                   
                     //update team names
+                    model.IsLocked= false;
                     model.HomeTeam = _context.Teams
                 .Where(x => x.Id == model.HomeTeamId).FirstOrDefault().Team;
                     model.AwayTeam = _context.Teams
                .Where(x => x.Id == model.AwayTeamId).FirstOrDefault().Team;
                     _context.Fixtures.Add(model);
+                    _context.SaveChanges();
 
+
+                    //add empty Result
+                    var fmodel = _context.Fixtures.Where(x => x.HomeTeamId == model.HomeTeamId && x.AwayTeamId == model.AwayTeamId).FirstOrDefault();
+                    var rmodel = new ResultModel() { FixtureId = fmodel.Id, Type = model.Type };
+                    _context.Results.Add(rmodel);
                     _context.SaveChanges();
                     response.Status = true;
                     response.Message = "Added successfully";

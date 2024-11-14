@@ -27,5 +27,7 @@ namespace SS1892.EPLPredictor.Models
         public DbSet<PredictionWinnersModel> PredictionWinners { get; set; }
 
         public DbSet<SS1892.EPLPredictor.Models.PredictionStandingsModel>? PredictionStandingsModel { get; set; }
+
+        public DbSet<SS1892.EPLPredictor.Models.UserPredictionModel>? UserPredictionModel { get; set; }
     }
 }

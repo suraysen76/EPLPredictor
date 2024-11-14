@@ -8,6 +8,8 @@ namespace SS1892.EPLPredictor.Models
     {
         [Key]
         public int Id { get; set; }
+        [NotMapped]
+        public DateTime FixtureDate { get; set; }
         [DisplayName("Fixture Id ")]
         public int FixtureId { get; set; }
 

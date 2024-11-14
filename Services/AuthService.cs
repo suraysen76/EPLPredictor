@@ -69,6 +69,17 @@ namespace SS1892.EPLPredictor.Services
             return new UserModel();
             
         }
+        public List<UserModel> GetProfiles()
+        {
+            var users = _context.Users
+                .ToList();
+            foreach(var user in users)
+            {
+                user.Password = PasswordHandler.DecryptMD5(user.Password);
+            }
+            return users;
+
+        }
 
         public bool CheckForAdminRole()
         {

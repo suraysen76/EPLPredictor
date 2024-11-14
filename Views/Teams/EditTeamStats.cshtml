@@ -1,0 +1,72 @@
+﻿@model SS1892.EPLPredictor.Models.TeamStatModel
+
+@{
+    ViewData["Title"] = "EditTeamStats";
+    var team = ViewBag.Team;
+    var type = ViewBag.Type;
+}
+
+<h1>Edit Team Stats for @team</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditTeamStats">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TeamId" class="control-label"></label>
+                <input readonly asp-for="TeamId" class="form-control" />
+                <span asp-validation-for="TeamId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Win" class="control-label"></label>
+                <input asp-for="Win" class="form-control" />
+                <span asp-validation-for="Win" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Draw" class="control-label"></label>
+                <input asp-for="Draw" class="form-control" />
+                <span asp-validation-for="Draw" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lost" class="control-label"></label>
+                <input asp-for="Lost" class="form-control" />
+                <span asp-validation-for="Lost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GF" class="control-label"></label>
+                <input asp-for="GF" class="form-control" />
+                <span asp-validation-for="GF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GA" class="control-label"></label>
+                <input asp-for="GA" class="form-control" />
+                <span asp-validation-for="GA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GD" class="control-label"></label>
+                <input asp-for="GD" class="form-control" />
+                <span asp-validation-for="GD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Points" class="control-label"></label>
+                <input asp-for="Points" class="form-control" />
+                <span asp-validation-for="Points" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @if (AuthModel.Role == "Admin" )
+                    {
+    <a asp-action="Standings" asp-route-type="@type">Back to Table</a>
+                    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

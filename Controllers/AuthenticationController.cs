@@ -120,6 +120,42 @@ namespace SS1892.EPLPredictor.Controllers
             return View(model);
         }
 
+        public ActionResult Index()
+        {
+            List<UserPredictionModel> pList = GetUserPredictionList(); // Replace with your data retrieval logic
+            return View(pList);
+        }
+
+        [HttpPost]
+        public ActionResult ProcessPList(List<UserPredictionModel> pList)
+        {
+            if (ModelState.IsValid)
+            {
+                // Validations passed, process the list of people
+                foreach (var p in pList)
+                {
+                    // Save to the database or perform other actions
+                }
+
+                return RedirectToAction("Success"); // Redirect to a success page
+            }
+
+            // ModelState is not valid, return to the form with errors
+            return View("Index", pList);
+        }
+
+        private List<UserPredictionModel> GetUserPredictionList()
+        {
+            // Replace this with your actual data retrieval logic
+            List<UserPredictionModel> pList = new List<UserPredictionModel>
+            {
+                new UserPredictionModel { Id = 1,  UserId=1, UserName="Admin"},
+                new UserPredictionModel { Id = 2, UserId=1, UserName="Admin" },
+                // Add more persons as needed
+            };
+
+            return pList;
+        }
 
     }
 }

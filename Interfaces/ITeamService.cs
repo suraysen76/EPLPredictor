@@ -17,8 +17,9 @@ namespace SS1892.EPLPredictor.Interfaces
         Task<ResultModel> UpdateResult(ResultModel model);
         Task<ResultModel> ResetResult(ResultModel model);
 
-        
+        Task<bool> UpdateRedictionWinners(int fixtureId, int? HomeTeamScore, int? AwayTeamSore, bool isHomeWin, bool isAwayWin, bool isDraw);
 
+        Task<TeamStatModel>  EditTeamStats(int teamId);
 
     }
 }

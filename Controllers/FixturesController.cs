@@ -64,11 +64,12 @@ namespace SS1892.EPLPredictor.Controllers
         }
 
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string type)
         {
-            var type ="UCL";
+            //var type ="UCL";
+            var model = new FixtureModel() { Type=type};
             ViewBag.AvailableTeams = _fixtureService.GetTeamsForDrpdn(type);
-            return View();
+            return View(model);
         }
 
         [HttpPost]

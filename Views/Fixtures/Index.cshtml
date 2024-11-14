@@ -7,18 +7,19 @@
     int nextMatchWeek = 1;
     var type = Model.FirstOrDefault().Type ;
     ViewData["Title"] = "Fixtures";
-    if (Model.Count() > 1)
+    if (Model.Where(m => m.IsLocked == false || m.IsLocked is null).Count() > 1)
     {
-        nextMatchWeek = Model.Where(m => m.IsLocked == false).OrderBy(o => o.MatchWeek).FirstOrDefault().MatchWeek;
+        //var x = Model.Where(m => m.IsLocked == false || m.IsLocked is null).FirstOrDefault();
+        nextMatchWeek = Model.Where(m => m.IsLocked == false || m.IsLocked is null).OrderBy(o => o.MatchWeek).FirstOrDefault().MatchWeek;
     }
 }
 
 <h1>Fixtures </h1>
 
 <p>-
-     @if (@role == "Admin" && @type=="UCL")
+    @if (@role == "Admin" && (@type == "UCL" || @type == "FA" || @type == "CRB" ))
             {
-    <a asp-action="Create">Create New Fixture</a>
+        <a asp-action="Create" asp-route-type="@type">Create New Fixture</a>
             }
 </p>
 <ul>
@@ -127,8 +128,8 @@
             {
                 <a asp-action="Edit" asp-route-id="@item.Id" >Edit</a><span> | </span> 
                 <a asp-action="EditResult" asp-controller="Teams" asp-route-id="@item.Id" >Result</a><span> | </span>  
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a><span> | </span>                   
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a><span> | </span>                   
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             } 
             @if (@role == "Admin" && @isLocked == true)
             {
